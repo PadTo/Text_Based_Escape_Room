@@ -11,10 +11,10 @@ equiped_gear = {
     "Potion": None
 }
 character_stats = {
-    "Health": "10/10",
-    "Attack": "5",
-    "Speed": "5",
-    "Dodge": "0%",
+    "Health": 10,
+    "Attack": 5,
+    "Speed": 5,
+    "Dodge": 0
 }
 
 # Equip, add, and remove messages for items
@@ -88,27 +88,27 @@ def equip(item):
 
         if item_stats["Type"] == "Weapon":
             equiped_gear["Weapon"] = item
-            stat_increase(item_stats)
+            stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Helm":
             equiped_gear["Helm"] = item
-            stat_increase(item_stats)
+            stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Body Armor":
             equiped_gear["Body Armor"] = item
-            stat_increase(item_stats)
+            stat_increase(ite,)
             equip_message(item)
 
         elif item_stats["Type"] == "Footwear":
             equiped_gear["Footwear"] = item
-            stat_increase(item_stats)
+            stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Potion" and in_combat or item_stats["Type"] == "Health Potion":
             equiped_gear["Potion"] = item
-            stat_increase(item_stats)
+            stat_increase(item)
             potion_drink_message(item)
 
         elif item_stats["Type"] == "Potion" and not in_combat:
@@ -116,6 +116,10 @@ def equip(item):
     else:
         type_effect("You don't have this item in your inventory.")
         print()
+
+
+def unequip(item):
+    pass
 
 # Show character stats
 
@@ -138,6 +142,8 @@ def item_stats(item):
         type_effect(f"{name}: {stat}", 0.025)
     print()
 
+# Stat increase function
+
 
 def stat_increase(item):
     item_attributes = All_items[item]
@@ -149,6 +155,8 @@ def stat_increase(item):
     # Example: Increase Defence if "Defence" is an attribute of the item
     if "Defence" in item_attributes:
         character_stats["Defence"] += item_attributes["Defence"]
+
+# Stat decrease function
 
 
 def stat_decrease(item):

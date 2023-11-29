@@ -21,6 +21,6 @@ add_item_to_inventory("Frostmourne", 1)
 
 equip("Frostmourne")
 
-gear()
-item_stats("Frostmourne")
+# gear()
+# item_stats("Frostmourne")
 character_stats_display()
