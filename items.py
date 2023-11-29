@@ -177,17 +177,17 @@ All_items = {
         "Defence": 5,
         "Speed Effect": "Increases speed"
     },
-    "Potion of Health": {
-        "Type": "Potion",
-        "Small": {
-            "Health Boost": 20
-        },
-        "Medium": {
-            "Health Boost": 50
-        },
-        "Large": {
-            "Health Boost": 100
-        }
+    "Potion of Small Health": {
+        "Type": "Health Potion",
+        "Health Boost": 5
+    },
+    "Potion of Medium Health": {
+        "Type": "Health Potion",
+        "Health Boost": 10
+    },
+    "Potion of Large Health": {
+        "Type": "Health Potion",
+        "Health Boost": 20
     },
     "Potion of Dodge Chance": {
         "Type": "Potion",

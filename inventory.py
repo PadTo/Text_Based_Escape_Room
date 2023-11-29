@@ -10,7 +10,6 @@ equiped_gear = {
     "Body Armor": None,
     "Footwear": None,
     "Weapon": None,
-    "Potion": None
 }
 character_stats = {
     "Health": 10,
@@ -91,6 +90,24 @@ def remove_item_from_inventory(item, quantity):
     else:
         type_effect("Item not found in inventory.")
 
+
+def use_potion(item):
+    if item in inventory and inventory[item] > 0:
+        item_stats = All_items[item]
+
+        if item_stats["Type"] == "Health Potion":
+            health_boost = item_stats["Health Boost"]
+            character_stats["Health"] += health_boost
+            inventory[item] -= 1  # Consume one potion
+
+            potion_drink_message(
+                f"{item}, health increased by {health_boost}")
+
+    else:
+        type_effect("You don't have this potion or it's out of stock.")
+        print()
+
+
 # Function to equip items
 
 
@@ -119,13 +136,6 @@ def equip(item):
             stat_increase(item)
             equip_message(item)
 
-        elif item_stats["Type"] == "Potion" and in_combat or item_stats["Type"] == "Health Potion":
-            equiped_gear["Potion"] = item
-            stat_increase(item)
-            potion_drink_message(item)
-
-        elif item_stats["Type"] == "Potion" and not in_combat:
-            type_effect("You need to be in combat to use a potion!")
     else:
         type_effect("You don't have this item in your inventory.")
         print()
@@ -133,19 +143,19 @@ def equip(item):
 
 def unequip(item):
 
-    for slot, equiped_item in equiped_gear:
-        if item in equiped_item:
+    for slot, equiped_item in equiped_gear.items():
+        if equiped_item == item:
 
             equiped_gear[slot] = None
-            return stat_decrease(item)
+            unequip_message(item)
+            stat_decrease(item)
+            return
 
     type_effect("You don't have this item equiped.")
     print()
 
 
-# Show character stats
-
-
+# Show character stats:
 def character_stats_display():
 
     type_effect("Your Character Stats:")
@@ -154,7 +164,7 @@ def character_stats_display():
     print()
     pass
 
-# Show item stats
+# Show item stats:
 
 
 def item_stats(item):

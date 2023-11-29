@@ -9,20 +9,6 @@ from abilities import *
 from combat import *
 from constants import *
 
-# Example of adding an item
-
-
-add_item_to_inventory("Frostmourne", 1)
-
-# Example of removing an item
-# add_item_to_inventory("Potion of Dodge Chance", 1)
-# remove_item_from_inventory("Frostmourne", 1)
-# display_inventory()
-
-equip("Frostmourne")
-
-# gear()
-# item_stats("Frostmourne")
+add_item_to_inventory("Potion of Small Health", 1)
+use_potion("Potion of Small Health")
 character_stats_display()
-inventory_space()
-unequip("Frostmourne")
