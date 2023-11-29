@@ -1,10 +1,13 @@
+from items import *
+from text_effect import type_effect
+
 inventory = {}
 in_combat = False
 equiped_gear = {
-    "Helm": None, "\n"
-    "Body Armor": None, "\n"
-    "Footwear": None, "\n"
-    "Weapon": None, "\n"
+    "Helm": None,
+    "Body Armor": None,
+    "Footwear": None,
+    "Weapon": None,
     "Potion": None
 }
 
@@ -13,7 +16,9 @@ equiped_gear = {
 
 
 def display_inventory():
+    type_effect("Your inventory")
     print(inventory)
+    print()
 
 # Adding items to the inventory
 
@@ -33,33 +38,35 @@ def remove_item_from_inventory(item, quantity):
             del inventory[item]
 
     else:
-        print("Item not found in inventory.")
+        type_effect("Item not found in inventory.")
 
 
 def equip(item):
-
-    if item["type"] == "Weapon":
+    item_stats = All_items[item]
+    if item_stats["type"] == "Weapon":
         equiped_gear["Weapon"] = item
 
-    elif item["type"] == "Helm":
+    elif item_stats["type"] == "Helm":
         equiped_gear["Helm"] = item
 
-    elif item["type"] == "Body Armor":
+    elif item_stats["type"] == "Body Armor":
         equiped_gear["Body Armor"] = item
 
-    elif item["type"] == "Footwear":
+    elif item_stats["type"] == "Footwear":
         equiped_gear["Footwear"] = item
 
-    elif item["type"] == "Potion" and in_combat:
+    elif item_stats["type"] == "Potion" and in_combat:
         equiped_gear["Potion"] = item
 
-    elif item["type"] == "Potion" and not in_combat:
-        print("You need to be in combat to use a potion!")
+    elif item_stats["type"] == "Potion" and not in_combat:
+        type_effect("You need to be in combat to use a potion!")
+
+
+print(equiped_gear.items)
 
 
 def gear():
-    for item_type, item in equiped_gear.items():
-
-        print(f"{item_type}: {item}")
-
+    type_effect("Your Gear:")
+    for gear, item in equiped_gear.items():
+        print(f"{gear}: {item}", flush=True)
     print()

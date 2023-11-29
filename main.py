@@ -19,7 +19,6 @@ add_item_to_inventory("Frostmourne", 1)
 remove_item_from_inventory('Potion', 1)
 
 display_inventory()
-gear()
 
 equip("Frostmourne")
 
