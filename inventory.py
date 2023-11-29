@@ -35,6 +35,11 @@ def remove_message(item):
     print()
 
 
+def potion_drink_message(item):
+    type_effect(f"You have drank the {item}!")
+    print()
+
+
 # Function for checking if an item is in the inventory
 def is_in_inventory(item):
 
@@ -81,27 +86,32 @@ def equip(item):
     if is_in_inventory(item):
         item_stats = All_items[item]
 
-        if item_stats["type"] == "Weapon":
+        if item_stats["Type"] == "Weapon":
             equiped_gear["Weapon"] = item
+            stat_increase(item_stats)
             equip_message(item)
 
-        elif item_stats["type"] == "Helm":
+        elif item_stats["Type"] == "Helm":
             equiped_gear["Helm"] = item
+            stat_increase(item_stats)
             equip_message(item)
 
-        elif item_stats["type"] == "Body Armor":
+        elif item_stats["Type"] == "Body Armor":
             equiped_gear["Body Armor"] = item
+            stat_increase(item_stats)
             equip_message(item)
 
-        elif item_stats["type"] == "Footwear":
+        elif item_stats["Type"] == "Footwear":
             equiped_gear["Footwear"] = item
+            stat_increase(item_stats)
             equip_message(item)
 
-        elif item_stats["type"] == "Potion" and in_combat:
+        elif item_stats["Type"] == "Potion" and in_combat or item_stats["Type"] == "Health Potion":
             equiped_gear["Potion"] = item
-            equip_message(item)
+            stat_increase(item_stats)
+            potion_drink_message(item)
 
-        elif item_stats["type"] == "Potion" and not in_combat:
+        elif item_stats["Type"] == "Potion" and not in_combat:
             type_effect("You need to be in combat to use a potion!")
     else:
         type_effect("You don't have this item in your inventory.")
@@ -128,9 +138,32 @@ def item_stats(item):
         type_effect(f"{name}: {stat}", 0.025)
     print()
 
+
+def stat_increase(item):
+    item_attributes = All_items[item]
+
+    # Increase Attack if "Attack Damage" is an attribute of the item
+    if "Attack Damage" in item_attributes:
+        character_stats["Attack"] += item_attributes["Attack Damage"]
+
+    # Example: Increase Defence if "Defence" is an attribute of the item
+    if "Defence" in item_attributes:
+        character_stats["Defence"] += item_attributes["Defence"]
+
+
+def stat_decrease(item):
+    item_attributes = All_items[item]
+
+    # Increase Attack if "Attack Damage" is an attribute of the item
+    if "Attack Damage" in item_attributes:
+        character_stats["Attack"] -= item_attributes["Attack Damage"]
+
+    # Example: Increase Defence if "Defence" is an attribute of the item
+    if "Defence" in item_attributes:
+        character_stats["Defence"] -= item_attributes["Defence"]
+
+
 # Show equiped gear
-
-
 def gear():
     type_effect("Your Gear:")
     for gear, item in equiped_gear.items():
