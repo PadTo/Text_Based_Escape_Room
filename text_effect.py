@@ -1,7 +1,7 @@
 import time
 
 
-def type_effect(text, delay=0.05):
+def type_effect(text, delay=0.03):
     """
     Print text with a typewriter effect.
 
@@ -13,3 +13,6 @@ def type_effect(text, delay=0.05):
         print(char, end='', flush=True)
         time.sleep(delay)
     print()
+
+
+type_effect("Hello")

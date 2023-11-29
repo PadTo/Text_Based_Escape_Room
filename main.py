@@ -23,3 +23,4 @@ from constants import *
 
 gear()
 item_stats("Frostmourne")
+character_stats()
