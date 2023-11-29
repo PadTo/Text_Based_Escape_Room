@@ -26,6 +26,11 @@ def equip_message(item):
     print()
 
 
+def unequip_message(item):
+    type_effect(f"You have unequipped {item}.")
+    print()
+
+
 def add_message(item):
     type_effect(f"You have attained {item}!")
     print()
@@ -127,6 +132,41 @@ def equip(item):
 
 
 def unequip(item):
+
+    if item in equiped_gear:
+
+        item_stats = All_items[item]
+
+        if item_stats["Type"] == "Weapon":
+            equiped_gear["Weapon"] = item
+            stat_decrease(item)
+            unequip_message(item)
+
+        elif item_stats["Type"] == "Helm":
+            equiped_gear["Helm"] = item
+            stat_decrease(item)
+            unequip_message(item)
+
+        elif item_stats["Type"] == "Body Armor":
+            equiped_gear["Body Armor"] = item
+            stat_decrease(item)
+            unequip_message(item)
+
+        elif item_stats["Type"] == "Footwear":
+            equiped_gear["Footwear"] = item
+            stat_decrease(item)
+            unequip_message(item)
+
+        elif item_stats["Type"] == "Potion" and in_combat or item_stats["Type"] == "Health Potion":
+            equiped_gear["Potion"] = item
+            potion_drink_message(item)
+
+        elif item_stats["Type"] == "Potion" and not in_combat:
+            type_effect("You need to be in combat to use a potion!")
+    else:
+        type_effect("You don't have this item in your inventory.")
+        print()
+
     pass
 
 # Show character stats
