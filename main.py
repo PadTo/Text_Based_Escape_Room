@@ -3,14 +3,24 @@ import numpy as np
 
 
 from text_effect import type_effect
-from inventory import add_item_to_inventory as add
-from inventory import remove_item_from_inventory as remove
 from inventory import display_inventory as inventory
+from items import *
+from inventory import *
+from abilities import *
+from combat import *
+from constants import *
 
 # Example of adding an item
-add('Sword', 1)
+
+
+add_item_to_inventory("Frostmourne", 1)
 
 # Example of removing an item
-remove('Potion', 1)
+remove_item_from_inventory('Potion', 1)
 
-inventory()
+display_inventory()
+gear()
+
+equip("Frostmourne")
+
+gear()
