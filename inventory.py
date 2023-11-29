@@ -133,41 +133,15 @@ def equip(item):
 
 def unequip(item):
 
-    if item in equiped_gear:
+    for slot, equiped_item in equiped_gear:
+        if item in equiped_item:
 
-        item_stats = All_items[item]
+            equiped_gear[slot] = None
+            return stat_decrease(item)
 
-        if item_stats["Type"] == "Weapon":
-            equiped_gear["Weapon"] = item
-            stat_decrease(item)
-            unequip_message(item)
+    type_effect("You don't have this item equiped.")
+    print()
 
-        elif item_stats["Type"] == "Helm":
-            equiped_gear["Helm"] = item
-            stat_decrease(item)
-            unequip_message(item)
-
-        elif item_stats["Type"] == "Body Armor":
-            equiped_gear["Body Armor"] = item
-            stat_decrease(item)
-            unequip_message(item)
-
-        elif item_stats["Type"] == "Footwear":
-            equiped_gear["Footwear"] = item
-            stat_decrease(item)
-            unequip_message(item)
-
-        elif item_stats["Type"] == "Potion" and in_combat or item_stats["Type"] == "Health Potion":
-            equiped_gear["Potion"] = item
-            potion_drink_message(item)
-
-        elif item_stats["Type"] == "Potion" and not in_combat:
-            type_effect("You need to be in combat to use a potion!")
-    else:
-        type_effect("You don't have this item in your inventory.")
-        print()
-
-    pass
 
 # Show character stats
 
