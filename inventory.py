@@ -56,6 +56,8 @@ def remove_item_from_inventory(item, quantity):
     else:
         type_effect("Item not found in inventory.")
 
+# Function to equip items
+
 
 def equip(item):
     item_stats = All_items[item]
@@ -81,6 +83,18 @@ def equip(item):
 
     elif item_stats["type"] == "Potion" and not in_combat:
         type_effect("You need to be in combat to use a potion!")
+
+
+def character_stats():
+    pass
+
+
+def item_stats(item):
+    item_dic = All_items[item]
+    for name, stat in item_dic.items():
+        type_effect(f"{name}: {stat}", 0.025)
+
+# Display Gear
 
 
 def gear():
