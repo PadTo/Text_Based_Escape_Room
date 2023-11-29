@@ -13,6 +13,3 @@ def type_effect(text, delay=0.03):
         print(char, end='', flush=True)
         time.sleep(delay)
     print()
-
-
-type_effect("Hello")

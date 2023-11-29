@@ -12,15 +12,15 @@ from constants import *
 # Example of adding an item
 
 
-# add_item_to_inventory("Frostmourne", 1)
+add_item_to_inventory("Frostmourne", 1)
 
 # Example of removing an item
 # add_item_to_inventory("Potion of Dodge Chance", 1)
 # remove_item_from_inventory("Frostmourne", 1)
 # display_inventory()
 
-# equip("Frostmourne")
+equip("Frostmourne")
 
 gear()
 item_stats("Frostmourne")
-character_stats()
+character_stats_display()
