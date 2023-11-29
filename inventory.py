@@ -2,6 +2,8 @@ from items import *
 from text_effect import type_effect
 
 inventory = {}
+max_space = 16
+current_space = 0
 in_combat = False
 equiped_gear = {
     "Helm": None,
@@ -17,9 +19,8 @@ character_stats = {
     "Dodge": 0
 }
 
-# Equip, add, and remove messages for items
 
-
+# Equip, add, potion drink, and remove messages for items
 def equip_message(item):
     type_effect(f"You have equipped {item}!")
     print()
@@ -60,18 +61,25 @@ def display_inventory():
 
 
 def add_item_to_inventory(item, quantity):
+    global current_space
+
     if item in inventory:
         inventory[item] += quantity
+        current_space += quantity
         add_message(item)
     else:
         inventory[item] = quantity
+        current_space += quantity
         add_message(item)
 
 
 # Removing items from the inventory
 def remove_item_from_inventory(item, quantity):
+    global current_space
+
     if item in inventory:
         inventory[item] -= quantity
+        current_space -= quantity
         if inventory[item] <= 0:
             del inventory[item]
         remove_message(item)
@@ -98,7 +106,7 @@ def equip(item):
 
         elif item_stats["Type"] == "Body Armor":
             equiped_gear["Body Armor"] = item
-            stat_increase(ite,)
+            stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Footwear":
@@ -176,4 +184,11 @@ def gear():
     type_effect("Your Gear:")
     for gear, item in equiped_gear.items():
         type_effect(f"{gear}: {item}")
+    print()
+
+# Show inventory space
+
+
+def inventory_space():
+    type_effect(f"Current Inventory Space: {current_space}/{max_space}")
     print()
