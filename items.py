@@ -13,8 +13,26 @@ item_abilities = {
     "Spaghetti Whip": entangle_enemy_ability,
     "Magic Yo-Yo": return_strike_ability,
     "Bubble Blower": trap_enemy_ability,
-    "Squeaky Hammer": squeak_noise_ability
-    # Continue mapping other weapons to their abilities
+    "Squeaky Hammer": squeak_noise_ability,
+    # "AK-47": rapid_fire_ability,
+    # "Pillow": soft_block_ability,
+    # "Book": knowledge_strike_ability,
+    # "Rock": throw_rock_ability,
+    # "Iron Helm": iron_defence_ability,
+    # "Leather Cap": agile_dodge_ability,
+    # "Steel Helm": heavy_protection_ability,
+    # "Chainmail": chainmail_defence_ability,
+    # "Leather Armor": leather_armor_agility_ability,
+    # "Plate Armor": plate_armor_defence_ability,
+    # "Blanket": stealth_mode_ability,
+    # "Leather Boots": silent_step_ability,
+    # "Steel-toed Boots": steel_kick_ability,
+    # "Sneakers": sprint_ability,
+    # "Potion of Dodge Chance": increase_dodge_chance_ability,
+    # "Potion of Defence": temporary_defence_boost_ability,
+    # "Potion of Greed": greed_effect_ability,
+    # "Potion of the Unknown": random_effect_ability,
+
 }
 
 

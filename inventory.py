@@ -55,17 +55,28 @@ def is_in_inventory(item):
     return False
 
 
-# Simple function to display the inventory
 def display_inventory():
-    type_effect("Your inventory!")
-    print(inventory)
+    type_effect("Your Inventory:")
+    table_len = 60
+    print("-" * table_len)
+    print(f"{'Item':<25} | {'Quantity':<10} | {'Type':<10}")
+    print("-" * table_len)
+    for item, quantity in inventory.items():
+        current_item = All_items[item]
+        print(f"{item:<25} | {quantity:<10} | {current_item['Type']:<10}")
+    print("-" * table_len)
     print()
+
 
 # Adding items to the inventory
 
 
 def add_item_to_inventory(item, quantity):
     global current_space
+
+    if current_space + quantity > max_space:
+        type_effect("Not enough space in inventory.")
+        return
 
     if item in inventory:
         inventory[item] += quantity
@@ -92,6 +103,7 @@ def remove_item_from_inventory(item, quantity):
 
 
 def use_potion(item):
+    global current_space
     if item in inventory and inventory[item] > 0:
         item_stats = All_items[item]
 
@@ -99,10 +111,18 @@ def use_potion(item):
             health_boost = item_stats["Health Boost"]
             character_stats["Health"] += health_boost
             inventory[item] -= 1  # Consume one potion
+            current_space -= 1
 
             potion_drink_message(
                 f"{item}, health increased by {health_boost}")
+            if inventory[item] <= 0:
+                del inventory[item]
 
+        elif item_stats["Type"] == "Potion" and not in_combat:
+            type_effect("You have to be in combat to use this potion.")
+
+        elif item_stats["Type"] == "Potion" and in_combat:
+            pass
     else:
         type_effect("You don't have this potion or it's out of stock.")
         print()
@@ -214,5 +234,9 @@ def gear():
 
 
 def inventory_space():
-    type_effect(f"Current Inventory Space: {current_space}/{max_space}")
-    print()
+    if current_space == 0:
+        type_effect(f"Your inventory is empty...")
+
+    else:
+        type_effect(f"Current Inventory Space: {current_space}/{max_space}")
+        print()
