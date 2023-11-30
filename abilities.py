@@ -64,3 +64,48 @@ def trap_enemy_ability(user, target, game_state):
 def squeak_noise_ability(user, target, game_state):
     # Logic for squeak noise
     pass
+
+
+def rapid_fire_ability(user, target, game_state):
+    # Logic for rapid fire ability
+    pass
+
+
+def rapid_fire_ability(user, target, game_state):
+    # Logic for rapid fire ability
+    pass
+
+
+def soft_block_ability(user, target, game_state):
+    # Logic for soft block ability
+    pass
+
+
+def knowledge_strike_ability(user, target, game_state):
+    # Logic for knowledge strike ability
+    pass
+
+
+def stealth_mode_ability(user, target, game_state):
+    # Logic for stealth mode ability
+    pass
+
+
+def increase_dodge_chance_potion_ability(user, target, game_state):
+    # Logic for increasing dodge chance ability
+    pass
+
+
+def temporary_defence_boost_potion_ability(user, target, game_state):
+    # Logic for temporary defence boost ability
+    pass
+
+
+def greed_effect_potion_ability(user, target, game_state):
+    # Logic for greed effect ability
+    pass
+
+
+def random_effect_potion_ability(user, target, game_state):
+    # Logic for random effect ability
+    pass

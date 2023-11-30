@@ -14,24 +14,14 @@ item_abilities = {
     "Magic Yo-Yo": return_strike_ability,
     "Bubble Blower": trap_enemy_ability,
     "Squeaky Hammer": squeak_noise_ability,
-    # "AK-47": rapid_fire_ability,
-    # "Pillow": soft_block_ability,
-    # "Book": knowledge_strike_ability,
-    # "Rock": throw_rock_ability,
-    # "Iron Helm": iron_defence_ability,
-    # "Leather Cap": agile_dodge_ability,
-    # "Steel Helm": heavy_protection_ability,
-    # "Chainmail": chainmail_defence_ability,
-    # "Leather Armor": leather_armor_agility_ability,
-    # "Plate Armor": plate_armor_defence_ability,
-    # "Blanket": stealth_mode_ability,
-    # "Leather Boots": silent_step_ability,
-    # "Steel-toed Boots": steel_kick_ability,
-    # "Sneakers": sprint_ability,
-    # "Potion of Dodge Chance": increase_dodge_chance_ability,
-    # "Potion of Defence": temporary_defence_boost_ability,
-    # "Potion of Greed": greed_effect_ability,
-    # "Potion of the Unknown": random_effect_ability,
+    "AK-47": rapid_fire_ability,
+    "Pillow": soft_block_ability,
+    "Book": knowledge_strike_ability,
+    "Blanket": stealth_mode_ability,
+    "Potion of Dodge Chance": increase_dodge_chance_potion_ability,
+    "Potion of Defence": temporary_defence_boost_potion_ability,
+    "Potion of Greed": greed_effect_potion_ability,
+    "Potion of the Unknown": random_effect_potion_ability,
 
 }
 
@@ -47,6 +37,7 @@ All_items = {
         "Type": "Weapon",
         "Weapon Type": "Gun",
         "Attack Damage": 35,  # per shot
+        "Special Cast Ability": "Rapid fire, shoots bullets rapidly dealing 90 damage, but using up 15 ammo",
         "Ammo Capacity": 30,
         "Note": "Requires ammo to use"
     },
@@ -72,13 +63,14 @@ All_items = {
         "Type": "Weapon",
         "Weapon Type": "Defence Item",
         "Defence": 5,
-        "Note": "Mostly for fun, low practical use"
+        "Note": "Mostly for fun, low practical use",
+        "Special Trigger Ability": "When hit there's a 10% chance of reducing incoming damage by 25%"
     },
     "Book": {
         "Type": "Weapon",
         "Weapon Type": "Misc",
         "Attack Damage": 10,  # when thrown
-        "Special Use": "Can contain clues or spells"
+        "Special Use": "Can contain clues or spells"  # Can only be used 2 times
     },
     "Rock": {
         "Type": "Weapon",
@@ -106,7 +98,7 @@ All_items = {
     "Dual Daggers": {
         "Type": "Weapon",
         "Weapon Type": "Dagger",
-        "Attack Damage": 25,  # combined
+        "Attack Damage": 25,  # Combined
         "Special Trigger Ability": "Grants an extra attack every third turn"
     },
     "Banana Peel": {
@@ -119,13 +111,13 @@ All_items = {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 10,
-        "Special Cast Ability": "Can be used to distract enemies, increasing your dodge chance by 30% for 1 turn"
+        "Special Cast Ability": "Can be used to distract enemies, increasing your dodge chance by 30% for 2 turn"
     },
     "Spaghetti Whip": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 15,
-        "Special Ability": "20% chance to entangle the enemy, reducing their attack damage by 10 for 2 turns"
+        "Special Ability": "20% chance to entangle the enemy, reducing their attack damage by 10 for 3 turns"
     },
     "Magic Yo-Yo": {
         "Type": "Weapon",
@@ -148,83 +140,92 @@ All_items = {
     "Iron Helm": {
         "Type": "Helm",
         "Defence": 15,
-        "Speed Effect": None
+
     },
     "Leather Cap": {
         "Type": "Helm",
         "Defence": 10,
-        "Speed Effect": "Increases dodge chance by 5%"
+        "Dodge": 5
     },
     "Steel Helm": {
         "Type": "Helm",
         "Defence": 20,
-        "Speed Effect": "Reduces speed slightly"
+
     },
     "Chainmail": {
         "Type": "Body Armor",
         "Defence": 30,
-        "Speed Effect": "Reduces speed"
+
     },
     "Leather Armor": {
         "Type": "Body Armor",
         "Defence": 20,
-        "Speed Effect": "No speed reduction"
+
     },
     "Plate Armor": {
         "Type": "Body Armor",
         "Defence": 40,
-        "Speed Effect": "Significantly reduces speed"
+
     },
     "Blanket": {
         "Type": "Misc",
         "Defence": 5,
-        "Special Use": "Can be used for stealth or disguise"
+        "Dodge": 10,
+        "Special Use": "Can be used for stealth or disguise, turns you invisible for 2 rounds"
     },
     "Leather Boots": {
         "Type": "Footwear",
         "Defence": 10,
-        "Speed Effect": "No speed reduction"
+
     },
     "Steel-toed Boots": {
         "Type": "Footwear",
         "Defence": 15,
-        "Speed Effect": "Reduces speed slightly"
+
     },
     "Sneakers": {
         "Type": "Footwear",
         "Defence": 5,
-        "Speed Effect": "Increases speed"
+        "Dodge": 5
+
     },
     "Potion of Small Health": {
         "Type": "Health Potion",
-        "Health Boost": 5
+        "Health Boost": 5,
+        "Duration": 0
     },
     "Potion of Medium Health": {
         "Type": "Health Potion",
-        "Health Boost": 10
+        "Health Boost": 10,
+        "Duration": 0
     },
     "Potion of Large Health": {
         "Type": "Health Potion",
-        "Health Boost": 20
+        "Health Boost": 20,
+        "Duration": 0
     },
     "Potion of Dodge Chance": {
         "Type": "Potion",
-        "Effect": "Increases dodge chance by 20%",
-        "Duration": "3 turns"
+        "Dodge": 20,
+        "Duration": 3
     },
     "Potion of Defence": {
         "Type": "Potion",
-        "Effect": "Increases defence by 30",
-        "Duration": "5 turns"
+        "Defence": 15,
+        "Duration": 5  # Turns,
+
     },
     "Potion of Greed": {
         "Type": "Potion",
         "Effect": "Doubles any loot found",
-        "Side Effect": "Reduces defence by 10",
-        "Duration": "2 turns"
+        "Defence": -10,
+        "Duration": 4,
+
     },
     "Potion of the Unknown": {
         "Type": "Potion",
-        "Effect": "Random (could be beneficial or detrimental)"
+        "Effect": "Random",
+        "Duration": 3,
+
     }
 }

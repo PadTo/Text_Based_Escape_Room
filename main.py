@@ -10,7 +10,7 @@ from combat import *
 from constants import *
 
 add_item_to_inventory("Potion of Small Health", 1)
-add_item_to_inventory("Potion of Greed", 2)
+add_item_to_inventory("Potion of Greed", 16)
 display_inventory()
 use_potion("Potion of Small Health")
 use_potion("Potion of Greed")
