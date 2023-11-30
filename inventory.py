@@ -5,8 +5,7 @@ from character import *
 inventory = {}      # Empty inventory
 max_space = 16      # Maximum Space
 current_space = 0   # Constant for current inventory space
-in_combat = False
-
+inventory_item_tracker = []
 # Equip, add, potion drink, and remove messages for items
 
 
@@ -45,24 +44,14 @@ def is_in_inventory(item):
     return False
 
 
-def display_inventory():
-    type_effect("Your Inventory:")
-    table_len = 60
-    print("-" * table_len)
-    print(f"{'Item':<25} | {'Quantity':<10} | {'Type':<10}")
-    print("-" * table_len)
-    for item, quantity in inventory.items():
-        current_item = All_items[item]
-        print(f"{item:<25} | {quantity:<10} | {current_item['Type']:<10}")
-    print("-" * table_len)
-    print()
-
-
 # Adding items to the inventory
 
 
 def add_item_to_inventory(item, quantity):
     global current_space
+
+    if item not in inventory:
+        inventory_item_tracker.append(item)
 
     if current_space + quantity > max_space:
         type_effect("Not enough space in inventory.")
@@ -85,7 +74,9 @@ def remove_item_from_inventory(item, quantity):
     if item in inventory:
         inventory[item] -= quantity
         current_space -= quantity
+
         if inventory[item] <= 0:
+            inventory_item_tracker.remove(item)
             del inventory[item]
         remove_message(item)
     else:
@@ -93,7 +84,7 @@ def remove_item_from_inventory(item, quantity):
         print()
 
 
-def use_potion(item):
+def use_potion_out_of_combat(item):
     global current_space
     if item in inventory and inventory[item] > 0:
         item_stats = All_items[item]
@@ -107,13 +98,13 @@ def use_potion(item):
             potion_drink_message(
                 f"{item}, health increased by {health_boost}")
             if inventory[item] <= 0:
+                inventory_item_tracker.remove(item)
                 del inventory[item]
 
-        elif item_stats["Type"] == "Potion" and not in_combat:
+        elif item_stats["Type"] == "Potion":
             type_effect("You have to be in combat to use this potion.")
             print()
-        elif item_stats["Type"] == "Potion" and in_combat:
-            pass
+
     else:
         type_effect("You don't have this potion or it's out of stock.")
         print()
@@ -128,21 +119,25 @@ def equip(item):
         item_stats = All_items[item]
 
         if item_stats["Type"] == "Weapon":
+            stat_decrease(equiped_gear["Weapon"])
             equiped_gear["Weapon"] = item
             stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Helm":
+            stat_decrease(equiped_gear["Helm"])
             equiped_gear["Helm"] = item
             stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Body Armor":
+            stat_decrease(equiped_gear["Body Armor"])
             equiped_gear["Body Armor"] = item
             stat_increase(item)
             equip_message(item)
 
         elif item_stats["Type"] == "Footwear":
+            stat_decrease(equiped_gear["Footwear"])
             equiped_gear["Footwear"] = item
             stat_increase(item)
             equip_message(item)
@@ -203,15 +198,18 @@ def stat_increase(item):
 
 
 def stat_decrease(item):
-    item_attributes = All_items[item]
+    if item is None:
+        return
+    else:
+        item_attributes = All_items[item]
 
-    # Increase Attack if "Attack Damage" is an attribute of the item
-    if "Attack Damage" in item_attributes:
-        character_stats["Attack"] -= item_attributes["Attack Damage"]
+        # Increase Attack if "Attack Damage" is an attribute of the item
+        if "Attack Damage" in item_attributes:
+            character_stats["Attack"] -= item_attributes["Attack Damage"]
 
-    # Example: Increase Defence if "Defence" is an attribute of the item
-    if "Defence" in item_attributes:
-        character_stats["Defence"] -= item_attributes["Defence"]
+        # Example: Increase Defence if "Defence" is an attribute of the item
+        if "Defence" in item_attributes:
+            character_stats["Defence"] -= item_attributes["Defence"]
 
 
 # Show equiped gear
@@ -252,14 +250,69 @@ def display_effect(item, quantity, number):
         print("-" * table_len)
 
 
+def display_effect_weapons(item, number):
+    table_len = 75
+    if number == 0:
+        type_effect("You Can Equip:", 0.04)
+        print("-" * table_len)
+        print(
+            f"{'Item':<25} | {'Weapon Type':<15} | {'Use':<10}")
+        print("-" * table_len)
+        current_item = All_items[item]
+        print(
+            f"{item:<25} | {current_item['Weapon Type']:<15} | Press: {number:<3}")
+        print("-" * table_len)
+    else:
+        current_item = All_items[item]
+        print(
+            f"{item:<25} | {current_item['Weapon Type']:<15} | Press: {number:<3}")
+        print("-" * table_len)
+
+
+def display_inventory():
+    i = 0
+    type_effect("Your Inventory:")
+    table_len = 70
+    print("-" * table_len)
+    print(f"{'Item':<25} | {'Quantity':<10} | {'Type':<15} | {'Use/Equip':<10}")
+    print("-" * table_len)
+    for item, quantity in inventory.items():
+        current_item = All_items[item]
+        print(
+            f"{item:<25} | {quantity:<10} | {current_item['Type']:<15} | Press: {i}")
+        i += 1
+    print("-" * table_len)
+    print()
+
+    while True:
+        try:
+            inventory_index = int(input(
+                "Enter a key to take an action: "))
+            if inventory_index < len(inventory_item_tracker):
+                chosen_item = inventory_item_tracker[inventory_index]
+                if All_items[chosen_item]["Type"] == "Health Potion" or All_items[chosen_item]["Type"] == "Potion":
+                    use_potion_out_of_combat(chosen_item)
+                else:
+                    equip(chosen_item)
+
+            else:
+                type_effect(
+                    "Invalid input. If you want to exit the inventory press any key (except numbers).")
+                print()
+        except ValueError:
+            type_effect("Exiting inventory.")
+            print()
+            return False
+
+
 # Check for potions in inventory:
-
-
 def check_if_potions_true():
     i = 0  # To count the items position in the table
     store_potion_names = []
+    has_potions = False
     for item, quantity in inventory.items():
-        if item == "Potion" or "Health Potion":
+        item_type = All_items[item]["Type"]
+        if "Potion" in item_type or "Health Potion" in item_type:
             display_effect(item, quantity, i)
             i += 1
             has_potions = True
@@ -274,7 +327,7 @@ def check_if_potions_true():
             potion_index = int(input(
                 "Select a potion to use (enter the number): "))
             if potion_index < len(store_potion_names):
-                use_potion(store_potion_names[potion_index])
+                use_potion_in_combat(store_potion_names[potion_index])
                 return True
             else:
                 type_effect(
@@ -285,14 +338,60 @@ def check_if_potions_true():
             print()
             return False
 
-# use_potion function
+
+def check_if_weapons_true():
+    i = 0  # To count the items position in the table
+    store_weapon_names = []
+    has_weapons = False
+    for item, quantity in inventory.items():
+        item_type = All_items[item]["Type"]
+        if "Weapon" in item_type:
+            display_effect_weapons(item, i)
+            i += 1
+            has_weapons = True
+            store_weapon_names.append(item)
+
+    if not has_weapons:
+        type_effect("You don't have any weapons, choose another action")
+        print()
+        return False
+
+    while True:
+        try:
+            weapon_index = int(input(
+                "Select a weapon to eq (enter the number): "))
+            if weapon_index < len(store_weapon_names):
+                equip(store_weapon_names[weapon_index])
+                return True
+            else:
+                type_effect(
+                    "Invalid input. If you want to take another action press any key (except numbers).")
+                print()
+        except ValueError:
+            type_effect("Exiting weapon inventory.")
+            print()
+            return False
+
+# use_potion while in combat function
 
 
-def use_potion(potion_name):
+def use_potion_in_combat(potion_name):
+    global current_space
     type_effect(f"You used {potion_name}.")
     inventory[potion_name] -= 1
+    current_space -= 1
+
     if inventory[potion_name] <= 0:
         del inventory[potion_name]
+
+    if All_items[potion_name]["Type"] == "Health Potion":
+        stat_increase(potion_name)
+    else:
+        pass
+        # increase_dodge_chance_potion_ability(user,  game_state):
+        # temporary_defence_boost_potion_ability(user,  game_state):
+        # greed_effect_potion_ability(user, target, game_state):
+        # random_effect_potion_ability(user, target, game_state):
 
 
 def check_equiped_item_abilities():
@@ -301,4 +400,12 @@ def check_equiped_item_abilities():
 
 add_item_to_inventory("Potion of Small Health", 3)
 add_item_to_inventory("Potion of Dodge Chance", 2)
+add_item_to_inventory("Frostmourne", 2)
+equip("Frostmourne")
+equip("Frostmourne")
+gear()
+display_inventory()
+print(inventory)
+character_stats_display()
+check_if_weapons_true()
 check_if_potions_true()

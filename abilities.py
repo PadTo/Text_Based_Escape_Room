@@ -91,21 +91,23 @@ def stealth_mode_ability(user, target, game_state):
     pass
 
 
-def increase_dodge_chance_potion_ability(user, target, game_state):
-    # Logic for increasing dodge chance ability
-    pass
+def increase_dodge_chance_potion_ability(user, game_state):
+    if game_state == "Combat":
+        pass
+    if game_state == "Exploration":
+        pass
 
 
-def temporary_defence_boost_potion_ability(user, target, game_state):
-    # Logic for temporary defence boost ability
+def temporary_defence_boost_potion_ability(user, game_state):
+
     pass
 
 
 def greed_effect_potion_ability(user, target, game_state):
-    # Logic for greed effect ability
+
     pass
 
 
 def random_effect_potion_ability(user, target, game_state):
-    # Logic for random effect ability
+
     pass

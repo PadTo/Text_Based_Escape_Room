@@ -3,6 +3,8 @@ from monsters import *
 import random
 from inventory import *
 
+global game_state
+
 
 def calculate_damage(attack, defence):
     damage = attack - (defence // 2)
@@ -16,29 +18,33 @@ def combat_round(attacker, defender, player_turn):
     elif defender["Dodge"]/100 > chance and not player_turn:
         type_effect("You have missed...")
     else:
-        damage = calculate_damage(attacker["Attack"]), defender["Defence"]
+        damage = calculate_damage(attacker["Attack"], defender["Defence"])
         defender["Health"] -= damage
         type_effect(f"{attacker['Name']} attacks for {damage} damage!")
 
 
-def player_action(player, monster, player_turn):
+def player_action(player, monster, player_turn, game_state):
     cond = True
     while cond:
         action = input(
-            "Choose action: Attack (a), Use Ability (u), Drink Potion (p), Run Away (r), Open Inventory (I): ").lower()
+            "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Run Away (r): ").lower()
         if action == 'a':
             combat_round(player, monster, player_turn)
         elif action == 'u':
 
             pass
+        elif action == "s":
+            pass
+
         elif action == 'p':
-            if check_if_potions_true():
+            if check_if_potions_true(player, monster, game_state):
                 cond = False
             else:
                 pass
 
         elif action == 'r' and monster["Type"] != "Boss":
-            return
+            game_state = "Exploration"
+            return game_state
 
         elif action == 'r' and monster["Type"] == "Boss":
             type_effect(f"You can't run away from the {monster['Name']}")
@@ -48,19 +54,28 @@ def player_action(player, monster, player_turn):
             type_effect("Invalid action.")
 
 
-def combat(player, monster):
+def combat(player, monster, game_state="Combat"):
     player_turn = True
+    turn_tracker = 0
 
     while player["Health"] > 0 and monster["Health"] > 0:
 
         if player_turn:
-            player_action(player, monster, player_turn)
+            player_action(player, monster, player_turn, game_state)
+            turn_tracker += 1
         else:
             combat_round(monster, player, player_turn)
 
-    player_turn = not player_turn
+        if game_state != "Combat":
+            type_effect("You have run away, coward...")
+            game_state = "Exploration"
+            break
+
+        player_turn = not player_turn
 
     if player["Health"] > 0:
-        type_effect("You have won, congratulations!")
+        type_effect("You have defeated the enemy, congratulations!")
+        game_state = "Exploration"
     else:
         type_effect("You have died...")
+        game_state = "Dead"
