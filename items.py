@@ -1,31 +1,5 @@
 from abilities import *
 
-item_abilities = {
-    "Frostmourne": freeze_ability,
-    "Ashbringer": double_damage_ability,
-    "Skeleton Shield": reflect_damage_ability,
-    "Crossbow of Silence": silence_ability,
-    "Mystic Wand": cast_random_spell_ability,
-    "Thunder Hammer": thunder_strike_ability,
-    "Dual Daggers": extra_attack_ability,
-    "Banana Peel": make_enemy_slip_ability,
-    "Rubber Chicken": distract_enemy_ability,
-    "Spaghetti Whip": entangle_enemy_ability,
-    "Magic Yo-Yo": return_strike_ability,
-    "Bubble Blower": trap_enemy_ability,
-    "Squeaky Hammer": squeak_noise_ability,
-    "AK-47": rapid_fire_ability,
-    "Pillow": soft_block_ability,
-    "Book": knowledge_strike_ability,
-    "Blanket": stealth_mode_ability,
-    "Potion of Dodge Chance": increase_dodge_chance_potion_ability,
-    "Potion of Defence": temporary_defence_boost_potion_ability,
-    "Potion of Greed": greed_effect_potion_ability,
-    "Potion of the Unknown": random_effect_potion_ability,
-
-}
-
-
 All_items = {
     "Frostmourne": {
         "Type": "Weapon",
@@ -224,8 +198,36 @@ All_items = {
     },
     "Potion of the Unknown": {
         "Type": "Potion",
-        "Effect": "Random",
         "Duration": 3,
+        "Effect": "Uknown"
 
+    },
+    "Potion of Fortitude": {
+        "Type": "Potion",
+        "Effect": "Increase Defence (potion)",
+        "Defence": 20,  # Defence boost
+        "Duration": 3   # Turns
+    },
+
+    "Potion of Vulnerability": {
+        "Type": "Potion",
+        "Effect": "Decreases Defence (potion)",
+        "Defence": -20,  # Defence reduction
+        "Duration": 3   # Turns
+    },
+
+    "Potion of Agility": {
+        "Type": "Potion",
+        "Effect": "Increases Dodge (potion)",
+        "Dodge": 15,   # Dodge boost (converted from percentage)
+        "Duration": 3  # Turns
+    },
+
+    "Potion of Clumsiness": {
+        "Type": "Potion",
+        "Effect": "Decreases Dodge (potion)",
+        "Dodge": -15,  # Dodge reduction (converted from percentage)
+        "Duration": 3  # Turns
     }
+
 }

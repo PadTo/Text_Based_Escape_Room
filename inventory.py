@@ -88,6 +88,7 @@ def remove_item_from_inventory(item, quantity):
 
 def use_potion_out_of_combat(item):
     global current_space
+
     if item in inventory and inventory[item] > 0:
         item_stats = All_items[item]
 
@@ -380,6 +381,8 @@ def check_if_weapons_true():
 
 def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="Enemy"):
     global current_space
+
+    from abilities import item_abilities
 
     type_effect(f"You used {potion_name}.")
     inventory[potion_name] -= 1
