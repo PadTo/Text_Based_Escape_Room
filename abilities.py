@@ -102,14 +102,12 @@ def increase_dodge_chance_potion_ability(potion, user, target, game_state):
         duration = used_potion["Duration"]
         boost_value = used_potion["Dodge"]
 
-        # Update or add the effect in user_on_going_effects
         if effect_name in user_on_going_effects:
-            user_on_going_effects[effect_name]["Amount"] += duration
+            user_on_going_effects[effect_name]["Duration"] += duration
         else:
             user_on_going_effects[effect_name] = {
                 "Amount": boost_value, "Duration": duration, "Item": potion}
 
-        # Apply the immediate effect (if any)
         stat_increase(potion)
 
 
@@ -121,14 +119,12 @@ def temporary_defence_boost_potion_ability(potion, user, target, game_state):
         duration = used_potion["Duration"]
         boost_value = used_potion["Defence"]
 
-        # Update or add the effect in user_on_going_effects
         if effect_name in user_on_going_effects:
-            user_on_going_effects[effect_name]["Amount"] += duration
+            user_on_going_effects[effect_name]["Duration"] += duration
         else:
             user_on_going_effects[effect_name] = {
                 "Amount": boost_value, "Duration": duration, "Item": potion}
 
-        # Apply the immediate effect (if any)
         stat_increase(potion)
 
 
@@ -140,10 +136,12 @@ def greed_effect_potion_ability(potion, user, target, game_state):
         duration = used_potion["Duration"]
         defence_penalty = used_potion["Defence"]
 
-        user_on_going_effects[effect_name] = {
-            "Amount": defence_penalty, "Duration": duration, "Item": potion}
+        if effect_name in user_on_going_effects:
+            user_on_going_effects[effect_name]["Duration"] += duration
+        else:
+            user_on_going_effects[effect_name] = {
+                "Amount": defence_penalty, "Duration": duration, "Item": potion}
 
-        user_on_going_effects["Double Loot Boost"]["Duration"] += duration
         stat_decrease(potion)
 
 
@@ -159,14 +157,17 @@ def random_effect_potion_ability(potion, user, target, game_state):
         amount = chosen_potion_stats.get(
             "Defence", 0) or chosen_potion_stats.get("Dodge", 0)
 
-        user_on_going_effects[effect_name] = {
-            "Amount": amount, "Duration": duration, "Item": chosen_potion}
-
-        # Apply the immediate effect (increase or decrease)
-        if amount > 0:
-            stat_increase(chosen_potion)
+        if effect_name in user_on_going_effects:
+            user_on_going_effects[effect_name]["Duration"] += duration
         else:
-            stat_decrease(chosen_potion)
+            user_on_going_effects[effect_name] = {
+                "Amount": amount, "Duration": duration, "Item": chosen_potion}
+
+        if amount > 0:
+            stat_increase(potion)
+        else:
+            # Assuming the negative amount indicates a decrease
+            stat_decrease(potion)
 
 
 item_abilities = {
