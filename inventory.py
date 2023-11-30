@@ -281,6 +281,8 @@ def check_if_potions_true():
                     "Invalid input. If you want to take another action press any key (except numbers).")
                 print()
         except ValueError:
+            type_effect("Exiting potion inventory.")
+            print()
             return False
 
 # use_potion function
