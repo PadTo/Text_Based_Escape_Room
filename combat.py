@@ -31,9 +31,12 @@ def player_action(player, monster, player_turn, game_state):
         if action == 'a':
             combat_round(player, monster, player_turn)
         elif action == 'u':
-
-            pass
+            if check_if_weapons_true(player, monster, game_state):
+                cond = False
+            else:
+                pass
         elif action == "s":
+
             pass
 
         elif action == 'p':

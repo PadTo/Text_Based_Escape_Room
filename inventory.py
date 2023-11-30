@@ -1,6 +1,8 @@
 from items import *
 from text_effect import type_effect
 from character import *
+from abilities import *
+
 
 inventory = {}      # Empty inventory
 max_space = 16      # Maximum Space
@@ -306,7 +308,7 @@ def display_inventory():
 
 
 # Check for potions in inventory:
-def check_if_potions_true():
+def check_if_potions_true(game_state):
     i = 0  # To count the items position in the table
     store_potion_names = []
     has_potions = False
@@ -327,7 +329,8 @@ def check_if_potions_true():
             potion_index = int(input(
                 "Select a potion to use (enter the number): "))
             if potion_index < len(store_potion_names):
-                use_potion_in_combat(store_potion_names[potion_index])
+                use_potion_in_combat(
+                    store_potion_names[potion_index], game_state)
                 return True
             else:
                 type_effect(
@@ -375,8 +378,9 @@ def check_if_weapons_true():
 # use_potion while in combat function
 
 
-def use_potion_in_combat(potion_name):
+def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="Enemy"):
     global current_space
+
     type_effect(f"You used {potion_name}.")
     inventory[potion_name] -= 1
     current_space -= 1
@@ -387,11 +391,8 @@ def use_potion_in_combat(potion_name):
     if All_items[potion_name]["Type"] == "Health Potion":
         stat_increase(potion_name)
     else:
-        pass
-        # increase_dodge_chance_potion_ability(user,  game_state):
-        # temporary_defence_boost_potion_ability(user,  game_state):
-        # greed_effect_potion_ability(user, target, game_state):
-        # random_effect_potion_ability(user, target, game_state):
+        if potion_name in item_abilities:
+            item_abilities[potion_name](user, target, game_state)
 
 
 def check_equiped_item_abilities():
