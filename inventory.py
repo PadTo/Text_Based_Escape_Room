@@ -2,7 +2,7 @@ from items import *
 from text_effect import type_effect
 from character import *
 from abilities import *
-
+from stat import stat_increase, stat_decrease
 
 inventory = {}      # Empty inventory
 max_space = 16      # Maximum Space
@@ -164,66 +164,7 @@ def unequip(item):
     print()
 
 
-# Show character stats:
-def character_stats_display():
-
-    type_effect("Your Character Stats:")
-    for attribute, stat in character_stats.items():
-        type_effect(f"{attribute}: {stat}")
-    print()
-    pass
-
-# Show item stats:
-
-
-def item_stats(item):
-    type_effect(f"{item} Attributes:")
-    item_dic = All_items[item]
-    for name, stat in item_dic.items():
-        type_effect(f"{name}: {stat}", 0.025)
-    print()
-
-# Stat increase function
-
-
-def stat_increase(item):
-    item_attributes = All_items[item]
-
-    # Increase Attack if "Attack Damage" is an attribute of the item
-    if "Attack Damage" in item_attributes:
-        character_stats["Attack"] += item_attributes["Attack Damage"]
-
-    # Example: Increase Defence if "Defence" is an attribute of the item
-    if "Defence" in item_attributes:
-        character_stats["Defence"] += item_attributes["Defence"]
-
-# Stat decrease function
-
-
-def stat_decrease(item):
-    if item is None:
-        return
-    else:
-        item_attributes = All_items[item]
-
-        # Increase Attack if "Attack Damage" is an attribute of the item
-        if "Attack Damage" in item_attributes:
-            character_stats["Attack"] -= item_attributes["Attack Damage"]
-
-        # Example: Increase Defence if "Defence" is an attribute of the item
-        if "Defence" in item_attributes:
-            character_stats["Defence"] -= item_attributes["Defence"]
-
-
-# Show equiped gear
-def gear():
-    type_effect("Your Gear:")
-    for gear, item in equiped_gear.items():
-        type_effect(f"{gear}: {item}")
-    print()
-
 # Show inventory space
-
 
 def inventory_space():
     if current_space == 0:
@@ -363,7 +304,7 @@ def check_if_weapons_true():
     while True:
         try:
             weapon_index = int(input(
-                "Select a weapon to eq (enter the number): "))
+                "Select a weapon to equip (enter the number): "))
             if weapon_index < len(store_weapon_names):
                 equip(store_weapon_names[weapon_index])
                 return True
@@ -398,18 +339,49 @@ def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="
             item_abilities[potion_name](user, target, game_state)
 
 
-def check_equiped_item_abilities():
+def check_if_equiped_item_abilities_true():
+    i = 0  # To count the items position in the table
+    store_weapon_abilities = []
+    store_weapons = []
+    has_abilities = False
+    for slot, item in equiped_gear.items():
+        item_stats = All_items[item]
+        if "Special Cast" in item_stats:
+            i += 1
+            has_abilities = True
+            store_weapons.append(item)
+            store_weapon_abilities.append(item_stats["Special Cast"])
+
+    if not has_abilities:
+        type_effect(
+            "You don't have any abilities to use, choose another action")
+        print()
+        return False
+
+    while True:
+        try:
+            spell_index = int(input(
+                "Select a spell to use (enter the number): "))
+            if spell_index < len(store_weapons):
+                item_abilities[store_weapons[spell_index]]
+                return True
+            else:
+                type_effect(
+                    "Invalid input. If you want to take another action press any key (except numbers).")
+                print()
+        except ValueError:
+            type_effect("Exiting weapon inventory.")
+            print()
+            return False
     pass
 
 
-add_item_to_inventory("Potion of Small Health", 3)
-add_item_to_inventory("Potion of Dodge Chance", 2)
-add_item_to_inventory("Frostmourne", 2)
-equip("Frostmourne")
-equip("Frostmourne")
-gear()
-display_inventory()
-print(inventory)
-character_stats_display()
-check_if_weapons_true()
-check_if_potions_true()
+# add_item_to_inventory("Potion of Small Health", 3)
+# add_item_to_inventory("Potion of Dodge Chance", 2)
+# add_item_to_inventory("Frostmourne", 2)
+# equip("Frostmourne")
+# equip("Frostmourne")
+# gear()
+# display_inventory()
+# print(inventory)
+# character_stats_display()

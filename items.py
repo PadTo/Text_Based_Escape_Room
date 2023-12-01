@@ -1,31 +1,32 @@
-from abilities import *
-
 All_items = {
     "Frostmourne": {
         "Type": "Weapon",
         "Weapon Type": "Sword",
         "Attack Damage": 50,
-        "Special Trigger Ability": "20% chance to freeze the enemy for 1 turn"
+        "Special Trigger": "20% chance to freeze the enemy for 2 turn",
+        "Duration": 2
     },
     "AK-47": {
         "Type": "Weapon",
         "Weapon Type": "Gun",
         "Attack Damage": 35,  # per shot
-        "Special Cast Ability": "Rapid fire, shoots bullets rapidly dealing 90 damage, but using up 15 ammo",
+        "Special Cast": "Rapid fire, shoots bullets rapidly dealing 90 damage, but using up 15 ammo",
         "Ammo Capacity": 30,
+        "Cooldown": 3,  # Assuming cooldown, adjust as needed
+        "Ammo Needed": 15,
         "Note": "Requires ammo to use"
     },
     "Ashbringer": {
         "Type": "Weapon",
         "Weapon Type": "Sword",
         "Attack Damage": 45,
-        "Special Trigger Ability": "15% chance to deal double damage"
+        "Special Trigger": "15% chance to deal double damage"
     },
     "Skeleton Shield": {
         "Type": "Weapon",
         "Weapon Type": "Shield",
         "Defence": 25,
-        "Special Trigger Ability": "10% chance to reflect 25% of the damage back to the attacker"
+        "Special Trigger": "10% chance to reflect 25% of the damage back to the attacker"
     },
     "Wooden Shield": {
         "Type": "Weapon",
@@ -38,13 +39,14 @@ All_items = {
         "Weapon Type": "Defence Item",
         "Defence": 5,
         "Note": "Mostly for fun, low practical use",
-        "Special Trigger Ability": "When hit there's a 10% chance of reducing incoming damage by 25%"
+        "Special Trigger": "When hit there's a 10% chance of reducing incoming damage by 25%"
     },
     "Book": {
         "Type": "Weapon",
         "Weapon Type": "Misc",
         "Attack Damage": 10,  # when thrown
-        "Special Use": "Can contain clues or spells"  # Can only be used 2 times
+        "Special Cast": "Can contain clues or spells",
+        "Cooldown": 4
     },
     "Rock": {
         "Type": "Weapon",
@@ -55,7 +57,9 @@ All_items = {
         "Type": "Weapon",
         "Weapon Type": "Crossbow",
         "Attack Damage": 30,
-        "Special Cast Ability": "Silences the enemy for 2 turns, preventing them from using special abilities"
+        "Special Cast": "Silences the enemy for 2 turns, preventing them from using special abilities",
+        "Cooldown": 5,
+        "Duration": 2
     },
     "Mystic Wand": {
         "Type": "Weapon",
@@ -73,43 +77,49 @@ All_items = {
         "Type": "Weapon",
         "Weapon Type": "Dagger",
         "Attack Damage": 25,  # Combined
-        "Special Trigger Ability": "Grants an extra attack every third turn"
+        "Special Trigger": "Grants an extra attack every third turn"
     },
     "Banana Peel": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 5,
-        "Special Trigger Ability": "50% chance to make the enemy slip, causing them to lose a turn"
+        "Special Trigger": "50% chance to make the enemy slip, causing them to lose a turn",
+        "Duration": 1
     },
     "Rubber Chicken": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 10,
-        "Special Cast Ability": "Can be used to distract enemies, increasing your dodge chance by 30% for 2 turn"
+        "Special Cast": "Can be used to distract enemies, increasing your dodge chance by 30% for 2 turn",
+        "Duration": 2,
+        "Cooldown": 4
     },
     "Spaghetti Whip": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 15,
-        "Special Ability": "20% chance to entangle the enemy, reducing their attack damage by 10 for 3 turns"
+        "Special Trigger": "20% chance to entangle the enemy, reducing their attack damage by 10 for 3 turns",
+        "Duration": 3
     },
     "Magic Yo-Yo": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 20,
-        "Special Ability": "30% chance to return to the player after an attack, allowing for an immediate second strike"
+        "Special Trigger": "30% chance to return to the player after an attack, allowing for an immediate second strike"
     },
     "Bubble Blower": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 12,
-        "Special Cast Ability": "Blows bubbles that have a 25% chance to trap the enemy for 1 turn"
+        "Special Cast": "Blows bubbles that have a 25% chance to trap the enemy for 4 turns",
+        "Duration": 4,
+        "Cooldown": 4
     },
     "Squeaky Hammer": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 18,
-        "Special Trigger Ability": "Makes a squeaking sound"
+        "Special Trigger": "Makes a squeaking sound"
     },
     "Iron Helm": {
         "Type": "Helm",
@@ -145,7 +155,8 @@ All_items = {
         "Type": "Misc",
         "Defence": 5,
         "Dodge": 10,
-        "Special Use": "Can be used for stealth or disguise, turns you invisible for 2 rounds"
+        "Special Cast": "Can be used for stealth or disguise, turns you invisible for 2 rounds",
+        "Cooldown": 5
     },
     "Leather Boots": {
         "Type": "Footwear",
