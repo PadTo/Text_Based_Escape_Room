@@ -8,10 +8,7 @@ from inventory import *
 from abilities import *
 from combat import *
 from constants import *
+from display_effect import display_effects
 
-add_item_to_inventory("Potion of Small Health", 1)
-add_item_to_inventory("Potion of Greed", 16)
-display_inventory()
-display_inventory()
-character_stats_display()
-inventory_space()
+add_item_to_inventory("Frostmourne", 1)
+display_effects("AK-47", 0, 0, 2)

@@ -41,9 +41,10 @@ def player_action(player, monster, player_turn, game_state):
                 combat_round(player, monster, player_turn)
                 cond = False
             elif action == 'u':
+                # check_if_spells_true()
                 pass
             elif action == "s":
-                if check_if_weapons_true():
+                if check_if_equiped_item_abilities_true():
                     cond = False
                 else:
                     pass
@@ -99,5 +100,5 @@ def combat(player, monster, game_state="Combat"):
         game_state = "Dead"
 
 
-monster = bosses["Lich King"]
-combat(character_stats, monster)
+# monster = bosses["Lich King"]
+# combat(character_stats, monster)

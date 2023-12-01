@@ -1,3 +1,8 @@
+from character import character_stats
+from items import All_items
+from text_effect import type_effect
+
+
 def stat_increase(item):
     item_attributes = All_items[item]
 
@@ -25,3 +30,24 @@ def stat_decrease(item):
         # Example: Increase Defence if "Defence" is an attribute of the item
         if "Defence" in item_attributes:
             character_stats["Defence"] -= item_attributes["Defence"]
+
+# Show character stats:
+
+
+def character_stats_display():
+
+    type_effect("Your Character Stats:")
+    for attribute, stat in character_stats.items():
+        type_effect(f"{attribute}: {stat}")
+    print()
+    pass
+
+# Show item stats:
+
+
+def item_stats(item):
+    type_effect(f"{item} Attributes:")
+    item_dic = All_items[item]
+    for name, stat in item_dic.items():
+        type_effect(f"{name}: {stat}", 0.025)
+    print()

@@ -1,8 +1,9 @@
 from items import *
 from text_effect import type_effect
+from display_effect import *
 from character import *
 from abilities import *
-from stat import stat_increase, stat_decrease
+from stats import stat_increase, stat_decrease
 
 inventory = {}      # Empty inventory
 max_space = 16      # Maximum Space
@@ -52,24 +53,25 @@ def is_in_inventory(item):
 def add_item_to_inventory(item, quantity):
     global current_space
 
-    if item not in inventory:
+    if item not in inventory and item not in inventory_item_tracker:
         inventory_item_tracker.append(item)
 
     if current_space + quantity > max_space:
         type_effect("Not enough space in inventory.")
         return
 
+    # Check if the item is already in the inventory
     if item in inventory:
         inventory[item] += quantity
-        current_space += quantity
-        add_message(item)
     else:
         inventory[item] = quantity
-        current_space += quantity
-        add_message(item)
 
+    current_space += quantity
+    add_message(item)
 
 # Removing items from the inventory
+
+
 def remove_item_from_inventory(item, quantity):
     global current_space
 
@@ -175,44 +177,6 @@ def inventory_space():
         print()
 
 
-def display_effect(item, quantity, number):
-    table_len = 85
-    if number == 0:
-        type_effect("Your Can Use:", 0.04)
-        print("-" * table_len)
-        print(
-            f"{'Item':<25} | {'Quantity':<10} | {'Type':<15} | {'Use':<10} | {'Duration':<10}")
-        print("-" * table_len)
-        current_item = All_items[item]
-        print(
-            f"{item:<25} | {quantity:<10} | {current_item['Type']:<15} | Press: {number:<3} | {current_item['Duration']} Rounds")
-        print("-" * table_len)
-    else:
-        current_item = All_items[item]
-        print(
-            f"{item:<25} | {quantity:<10} | {current_item['Type']:<15} | Press: {number:<3} | {current_item['Duration']} Rounds")
-        print("-" * table_len)
-
-
-def display_effect_weapons(item, number):
-    table_len = 75
-    if number == 0:
-        type_effect("You Can Equip:", 0.04)
-        print("-" * table_len)
-        print(
-            f"{'Item':<25} | {'Weapon Type':<15} | {'Use':<10}")
-        print("-" * table_len)
-        current_item = All_items[item]
-        print(
-            f"{item:<25} | {current_item['Weapon Type']:<15} | Press: {number:<3}")
-        print("-" * table_len)
-    else:
-        current_item = All_items[item]
-        print(
-            f"{item:<25} | {current_item['Weapon Type']:<15} | Press: {number:<3}")
-        print("-" * table_len)
-
-
 def display_inventory():
     i = 0
     type_effect("Your Inventory:")
@@ -257,7 +221,7 @@ def check_if_potions_true(game_state):
     for item, quantity in inventory.items():
         item_type = All_items[item]["Type"]
         if "Potion" in item_type or "Health Potion" in item_type:
-            display_effect(item, quantity, i)
+            display_effects(item, i, quantity, 0)
             i += 1
             has_potions = True
             store_potion_names.append(item)
@@ -285,13 +249,14 @@ def check_if_potions_true(game_state):
 
 
 def check_if_weapons_true():
+
     i = 0  # To count the items position in the table
     store_weapon_names = []
     has_weapons = False
     for item, quantity in inventory.items():
         item_type = All_items[item]["Type"]
         if "Weapon" in item_type:
-            display_effect_weapons(item, i)
+            display_effects(item, i, quantity, 1)
             i += 1
             has_weapons = True
             store_weapon_names.append(item)
@@ -341,12 +306,15 @@ def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="
 
 def check_if_equiped_item_abilities_true():
     i = 0  # To count the items position in the table
+
     store_weapon_abilities = []
     store_weapons = []
     has_abilities = False
     for slot, item in equiped_gear.items():
         item_stats = All_items[item]
         if "Special Cast" in item_stats:
+
+            display_effects(item, i, 0, 2)
             i += 1
             has_abilities = True
             store_weapons.append(item)
@@ -359,6 +327,7 @@ def check_if_equiped_item_abilities_true():
         return False
 
     while True:
+        from abilities import item_abilities
         try:
             spell_index = int(input(
                 "Select a spell to use (enter the number): "))
@@ -373,15 +342,3 @@ def check_if_equiped_item_abilities_true():
             type_effect("Exiting weapon inventory.")
             print()
             return False
-    pass
-
-
-# add_item_to_inventory("Potion of Small Health", 3)
-# add_item_to_inventory("Potion of Dodge Chance", 2)
-# add_item_to_inventory("Frostmourne", 2)
-# equip("Frostmourne")
-# equip("Frostmourne")
-# gear()
-# display_inventory()
-# print(inventory)
-# character_stats_display()
