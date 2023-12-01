@@ -41,8 +41,11 @@ def player_action(player, monster, player_turn, game_state):
                 combat_round(player, monster, player_turn)
                 cond = False
             elif action == 'u':
-                # check_if_spells_true()
-                pass
+
+                if check_if_equiped_item_abilities_true():
+                    cond = False
+                else:
+                    pass
             elif action == "s":
                 if check_if_equiped_item_abilities_true():
                     cond = False

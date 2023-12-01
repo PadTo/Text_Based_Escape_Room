@@ -15,7 +15,7 @@ def display_effects(item, number, quantity=0, display_type=0):
         item_description = f"{item:<25} | {current_item.get('Weapon Type', 'N/A'):<15} | Press: {number:<3}"
     elif display_type == 2:  # For Item Spells
         table_row = f"{'Item':<25} | {'Ability':<15} | {'Use':<10} | {'Cooldown':<5} | {'Description':<20}"
-        ability_name = "Placeholder"
+        ability_name = current_item["Ability Name"]
         item_description = f"{item:<25} | {ability_name:<15} | Press: {number:<3} | {current_item.get('Cooldown', 'N/A')} Rounds | {current_item.get('Special Cast', 'N/A')}"
 
     if number == 0:
