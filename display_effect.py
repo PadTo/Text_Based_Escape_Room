@@ -20,7 +20,6 @@ def display_effects(item, number, quantity=0, display_type=0):
 
     if number == 0:
         type_effect(text[display_type], 0.04)
-        print("-" * table_len[display_type])
         print(table_row)
         print("-" * table_len[display_type])
 

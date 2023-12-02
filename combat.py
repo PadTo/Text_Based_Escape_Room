@@ -3,7 +3,8 @@ from monsters import *
 import random
 from inventory import *
 from effects import *
-import monsters
+from abilities import trigger_weapon_ability, trigger_shield_ability
+
 
 global game_state
 
@@ -15,17 +16,24 @@ def calculate_damage(attack, defence):
 
 def combat_round(attacker, defender, player_turn):
     chance = random.random()
-    if defender["Dodge"]/100 > chance and player_turn:
+
+    if defender["Dodge"]/100 > chance and not player_turn:
         type_effect("You have evaded an attack!!")
-    elif defender["Dodge"]/100 > chance and not player_turn:
+        print()
+    elif defender["Dodge"]/100 > chance and player_turn:
         type_effect("You have missed...")
+        print()
     else:
+        if player_turn:
+            trigger_weapon_ability(defender)
+
         damage = calculate_damage(attacker["Attack"], defender["Defence"])
         defender["Health"] -= damage
         attacker_name = attacker["Name"]
         deffender_name = defender["Name"]
         type_effect(f"{attacker_name} attacks for {damage} damage!")
         type_effect(f"{deffender_name} Health: {defender['Health']}")
+        print()
 
 
 def player_action(player, monster, player_turn, game_state):
@@ -37,6 +45,7 @@ def player_action(player, monster, player_turn, game_state):
         while cond:
             action = input(
                 "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Run Away (r): ").lower()
+            print()
             if action == 'a':
                 combat_round(player, monster, player_turn)
                 cond = False
@@ -47,7 +56,7 @@ def player_action(player, monster, player_turn, game_state):
                 else:
                     pass
             elif action == "s":
-                if check_if_equiped_item_abilities_true():
+                if check_if_weapons_true():
                     cond = False
                 else:
                     pass
@@ -72,6 +81,9 @@ def player_action(player, monster, player_turn, game_state):
 def combat(player, monster, game_state="Combat"):
     player_turn = True
     turn_tracker = 0
+
+    from character import character_stats
+    stats_before_combat = character_stats_before_combat(character_stats)
 
     while player["Health"] > 0 and monster["Health"] > 0:
 
@@ -98,10 +110,10 @@ def combat(player, monster, game_state="Combat"):
         # Add double loot here #
         type_effect("You have defeated the enemy, congratulations!")
         game_state = "Exploration"
+        current_health = health_after_combat[character_stats]
+        character_stats = stats_before_combat
+        character_stats["Health"] = current_health
+
     else:
         type_effect("You have died...")
         game_state = "Dead"
-
-
-# monster = bosses["Lich King"]
-# combat(character_stats, monster)

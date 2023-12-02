@@ -49,9 +49,9 @@ bosses = {
     "Lich King": {
         "Type": "Boss",
         "Health": 150,
-        "Attack": 35,
+        "Attack": 100,
         "Defence": 25,
-        "Dodge": 5,
+        "Dodge": 10,
         "Special Abilities": lich_king_ability,
         "Name": "Lich King"
     },

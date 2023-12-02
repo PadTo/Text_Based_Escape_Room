@@ -6,6 +6,7 @@ equiped_gear = {
     "Footwear": None,
     "Weapon": None,
     "Misc": None,
+    "Shield": None
 }
 
 character_stats = {
@@ -16,6 +17,15 @@ character_stats = {
     "Name": "Kiausinis"
 }
 
+
+def character_stats_before_combat(character_stats):
+    stats_before_combat = character_stats
+    return stats_before_combat
+
+
+def health_after_combat(character_stats):
+    health = character_stats["Health"]
+    return health
 # Show equiped gear
 
 
@@ -24,3 +34,12 @@ def gear():
     for gear, item in equiped_gear.items():
         type_effect(f"{gear}: {item}")
     print()
+
+
+def get_equipped_items():
+    equipped_items = []
+    if equiped_gear["Weapon"]:
+        equipped_items.append(equiped_gear["Weapon"])
+    if equiped_gear["Shield"]:
+        equipped_items.append(equiped_gear["Shield"])
+    return equipped_items

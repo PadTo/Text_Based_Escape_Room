@@ -1,4 +1,5 @@
 from inventory import *
+from stats import *
 
 stat_increase_char = []
 stat_decrease_char = []
@@ -28,7 +29,12 @@ def user_effects_timer():
         if details["Duration"] > 0:
             user_on_going_effects[effect]["Duration"] -= 1
             if details["Duration"] <= 0 and effect not in non_removable_effects:
-                stat_decrease(details["Item"])
+
+                if "Multiplier" in All_items[details["Item"]]:
+                    stat_decrease(
+                        None, All_items[details["Item"]]["Multiplier"], 1)
+                else:
+                    stat_decrease(details["Item"])
 
 
 def monster_effects_timer():

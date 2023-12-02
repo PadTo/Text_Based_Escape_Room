@@ -213,8 +213,29 @@ def display_inventory():
             return False
 
 
+def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="Enemy"):
+    global current_space
+
+    from abilities import item_abilities
+
+    if All_items[potion_name]["Type"] == "Health Potion":
+        type_effect(f"You used {potion_name}.")
+        stat_increase(potion_name)
+
+    if potion_name in item_abilities:
+        type_effect(f"You used {potion_name}.")
+        print(item_abilities[potion_name])
+        item_abilities[potion_name](potion_name, user, target, game_state)
+
+    inventory[potion_name] -= 1
+    current_space -= 1
+    if inventory[potion_name] <= 0:
+        del inventory[potion_name]
+
 # Check for potions in inventory:
-def check_if_potions_true(game_state):
+
+
+def check_if_potions_true(game_state="Combat"):
     i = 0  # To count the items position in the table
     store_potion_names = []
     has_potions = False
@@ -282,27 +303,6 @@ def check_if_weapons_true():
             print()
             return False
 
-# use_potion while in combat function
-
-
-def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="Enemy"):
-    global current_space
-
-    from abilities import item_abilities
-
-    type_effect(f"You used {potion_name}.")
-    inventory[potion_name] -= 1
-    current_space -= 1
-
-    if inventory[potion_name] <= 0:
-        del inventory[potion_name]
-
-    if All_items[potion_name]["Type"] == "Health Potion":
-        stat_increase(potion_name)
-    else:
-        if potion_name in item_abilities:
-            item_abilities[potion_name](user, target, game_state)
-
 
 def check_if_equiped_item_abilities_true():
     i = 0  # To count the items position in the table
@@ -311,14 +311,17 @@ def check_if_equiped_item_abilities_true():
     store_weapons = []
     has_abilities = False
     for slot, item in equiped_gear.items():
-        item_stats = All_items[item]
-        if "Special Cast" in item_stats:
 
-            display_effects(item, i, 0, 2)
-            i += 1
-            has_abilities = True
-            store_weapons.append(item)
-            store_weapon_abilities.append(item_stats["Special Cast"])
+        if item in All_items:
+
+            item_stats = All_items[item]
+            if "Special Cast" in item_stats:
+
+                display_effects(item, i, 0, 2)
+                i += 1
+                has_abilities = True
+                store_weapons.append(item)
+                store_weapon_abilities.append(item_stats["Special Cast"])
 
     if not has_abilities:
         type_effect(
