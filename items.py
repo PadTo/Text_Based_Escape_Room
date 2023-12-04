@@ -7,7 +7,7 @@ All_items = {
         "Ability Name": "Freeze",
         "Special Trigger": "20% chance to freeze the enemy for 2 turns",
         "Duration": 2,
-        "Trigger Chance": 20  # in percent
+        "Trigger Chance": 100  # in percent
     },
     "AK-47": {
         "Type": "Weapon",
@@ -37,7 +37,8 @@ All_items = {
         "Defence": 25,
         "Ability Name": "Reflect Damage",
         "Special Trigger": "10% chance to reflect 25% of the damage back to the attacker",
-        "Trigger Chance": 10
+        "Trigger Chance": 100,
+        "Damage Reduction": 25
     },
     "Wooden Shield": {
         "Type": "Weapon",
@@ -52,8 +53,9 @@ All_items = {
         "Defence": 5,
         "Note": "Mostly for fun, low practical use",
         "Ability Name": "Soft Block",
-        "Special Trigger": "When hit there's a 10% chance of reducing incoming damage by 25%",
-        "Trigger Chance": 10
+        "Special Trigger": "When hit there's a 30% chance of reducing incoming damage by 25%",
+        "Trigger Chance": 100,
+        "Damage Reduction": 25  # Percentage
     },
     "Book": {
         "Type": "Weapon",
@@ -145,17 +147,17 @@ All_items = {
         "Weapon Type": "Whacky",
         "Attack Damage": 12,
         "Ability Name": "Trap",
-        "Special Cast": "Blows bubbles that have a 25% chance to trap the enemy for 4 turns",
+        "Special Cast": "Blows bubbles that have a 40% chance to trap the enemy for 4 turns",
         "Duration": 4,
         "Cooldown": 4,
-        "Trigger Chance": 25
+        "Trigger Chance": 40
     },
     "Squeaky Hammer": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
-        "Attack Damage": 18,
+        "Attack Damage": 30,
         "Special Trigger": "Makes a squeaking sound",
-        "Trigger Chance": None  # More for fun, no combat effect
+        "Trigger Chance": 100  # More for fun, no combat effect
     },
 
 

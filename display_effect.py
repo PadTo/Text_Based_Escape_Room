@@ -5,12 +5,12 @@ from text_effect import type_effect
 def display_effects(item, number, quantity=0, display_type=0):
     current_item = All_items.get(item, {})
     table_len = [75, 85, 150]
-    text = ["You Can Equip", "You Can Use", "You Can Cast"]
+    text = ["You Can Use:", "You Can Equip:", "You Can Cast:"]
 
-    if display_type == 0:  # For Weapons
+    if display_type == 0:  # For Potions
         table_row = f"{'Item':<25} | {'Quantity':<10} | {'Type':<15} | {'Use':<10} | {'Duration':<10}"
         item_description = f"{item:<25} | {quantity:<10} | {current_item.get('Type', 'N/A'):<15} | Press: {number:<3} | {current_item.get('Duration', 'N/A')} Rounds"
-    elif display_type == 1:  # For Potions
+    elif display_type == 1:  # For Weapons
         table_row = f"{'Item':<25} | {'Weapon Type':<15} | {'Use':<10}"
         item_description = f"{item:<25} | {current_item.get('Weapon Type', 'N/A'):<15} | Press: {number:<3}"
     elif display_type == 2:  # For Item Spells

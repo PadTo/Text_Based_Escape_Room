@@ -14,12 +14,10 @@ inventory_item_tracker = []
 
 def equip_message(item):
     type_effect(f"You have equipped {item}!")
-    print()
 
 
 def unequip_message(item):
     type_effect(f"You have unequipped {item}.")
-    print()
 
 
 def add_message(item):
@@ -123,30 +121,59 @@ def equip(item):
     if is_in_inventory(item):
         item_stats = All_items[item]
 
-        if item_stats["Type"] == "Weapon":
+        if item_stats["Type"] == "Weapon" and item_stats["Weapon Type"] != "Shield":
+            if equiped_gear["Weapon"] != None:
+                unequip_message(equiped_gear["Weapon"])
             stat_decrease(equiped_gear["Weapon"])
+            print()
             equiped_gear["Weapon"] = item
-            stat_increase(item)
             equip_message(item)
+            stat_increase(item)
+            print()
 
         elif item_stats["Type"] == "Helm":
+            if equiped_gear["Helm"] != None:
+                unequip_message(equiped_gear["Helm"])
+
             stat_decrease(equiped_gear["Helm"])
+            print()
             equiped_gear["Helm"] = item
             stat_increase(item)
             equip_message(item)
+            print()
 
         elif item_stats["Type"] == "Body Armor":
+            if equiped_gear["Body Armour"] != None:
+                unequip_message(equiped_gear["Body Armour"])
+
             stat_decrease(equiped_gear["Body Armor"])
+            print()
             equiped_gear["Body Armor"] = item
-            stat_increase(item)
             equip_message(item)
+            stat_increase(item)
+            print()
 
         elif item_stats["Type"] == "Footwear":
+            if equiped_gear["Footwear"] != None:
+                unequip_message(equiped_gear["Footwear"])
+
             stat_decrease(equiped_gear["Footwear"])
+            print()
             equiped_gear["Footwear"] = item
             stat_increase(item)
             equip_message(item)
+            print()
 
+        elif item_stats["Weapon Type"] == "Shield":
+            if equiped_gear["Shield"] != None:
+                unequip_message(equiped_gear["Shield"])
+
+            stat_decrease(equiped_gear["Shield"])
+            print()
+            equiped_gear["Shield"] = item
+            stat_increase(item)
+            equip_message(item)
+            print()
     else:
         type_effect("You don't have this item in your inventory.")
         print()
@@ -186,8 +213,12 @@ def display_inventory():
     print("-" * table_len)
     for item, quantity in inventory.items():
         current_item = All_items[item]
-        print(
-            f"{item:<25} | {quantity:<10} | {current_item['Type']:<15} | Press: {i}")
+        if "Weapon Type" in current_item:
+            print(
+                f"{item:<25} | {quantity:<10} | {current_item['Weapon Type']:<15} | Press: {i}")
+        else:
+            print(
+                f"{item:<25} | {quantity:<10} | {current_item['Type']:<15} | Press: {i}")
         i += 1
     print("-" * table_len)
     print()
@@ -269,21 +300,25 @@ def check_if_potions_true(game_state="Combat"):
             return False
 
 
-def check_if_weapons_true():
+def check_if_weapons_or_shields_true(type=0):
+    # Type 0 for weapons, type 1 for shields
+
+    item_type = ["Weapon", "Shield"]
 
     i = 0  # To count the items position in the table
     store_weapon_names = []
     has_weapons = False
     for item, quantity in inventory.items():
-        item_type = All_items[item]["Type"]
-        if "Weapon" in item_type:
+        inventory_item_type = All_items[item]["Type"]
+        if item_type[type] in inventory_item_type:
             display_effects(item, i, quantity, 1)
             i += 1
             has_weapons = True
             store_weapon_names.append(item)
 
     if not has_weapons:
-        type_effect("You don't have any weapons, choose another action")
+        type_effect(
+            f"You don't have any {item_type[type]}'s , choose another action")
         print()
         return False
 

@@ -23,7 +23,7 @@ def character_stats_before_combat(character_stats):
     return stats_before_combat
 
 
-def health_after_combat(character_stats):
+def health_after_combat():
     health = character_stats["Health"]
     return health
 # Show equiped gear

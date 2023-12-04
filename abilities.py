@@ -3,6 +3,8 @@ from effects import monster_on_going_effects, user_on_going_effects
 from items import *
 from inventory import *
 from stats import *
+from character import equiped_gear
+import math
 
 spell_names = ["Breathing Fire",
                "Collosal Throw",
@@ -42,10 +44,15 @@ def random_chance(chance):
 
 
 def freeze_ability(target, weapon):
-    weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
-    if random_chance(weapon_trigger_chance):
-        monster_on_going_effects["Frozen"]["Duration"] = 2
-        monster_on_going_effects["Frozen"]["Amount"] = True
+    if target["Name"] == "Lich King":
+        type_effect(f"{All_items[weapon]['Ability Name']} Ability Triggered!")
+        type_effect(
+            f"But did you really think freeze works on the {target['Name']}?!?! ")
+    else:
+        weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
+        if random_chance(weapon_trigger_chance):
+            monster_on_going_effects["Frozen"]["Duration"] = All_items[weapon]["Duration"]
+            monster_on_going_effects["Frozen"]["Amount"] = True
 
 # Ashbringer
 
@@ -68,8 +75,22 @@ def double_damage_ability(target, weapon):
 # Skeleton Shield
 
 
-def reflect_damage_ability(target, damage, weapon):
-    pass
+def reflect_damage_ability(target, weapon, damage=0):
+    weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
+    if random_chance(weapon_trigger_chance):
+        print("Triggering shield special ability")
+        damage_returned = math.ceil(
+            damage*(All_items[weapon]["Damage Reduction"] / 100))
+        type_effect(
+            f"{All_items[weapon]['Ability Name']} Activated: {damage_returned} returned!")
+        new_damage = damage - damage_returned
+        target["Health"] -= damage_returned
+        type_effect(
+            f"{target['Name']} Health: {target['Health']}")
+        print()
+        return new_damage
+    else:
+        return damage
 
 
 def silence_ability(target, weapon):
@@ -103,61 +124,75 @@ def cast_random_spell_ability(target, weapon):
 # Thunder Hammer
 
 
-def thunder_strike_ability(user, target_effects, weapon):
+def thunder_strike_ability(target, weapon):
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
-        target_effects["Thunder Strike"]["Duration"] = 1
-        target_effects["Thunder Strike"]["Amount"] = True
+        target["Thunder Strike"]["Duration"] = 1
+        target["Thunder Strike"]["Amount"] = True
 
 
-def extra_attack_ability(user, user_effects, weapon):
+def extra_attack_ability(target, weapon):
     # This ability might be based on turn count rather than chance
     pass
 
 
-def make_enemy_slip_ability(user, target, game_state):
+def make_enemy_slip_ability(user, target):
     pass
 
 
-def distract_enemy_ability(user, target, game_state):
+def distract_enemy_ability(user, target):
     pass
 
 
-def entangle_enemy_ability(user, target, game_state):
+def entangle_enemy_ability(user, target):
     pass
 
 
-def return_strike_ability(user, target, game_state):
+def return_strike_ability(user, target):
     # Assuming 'Magic Yo-Yo' weapon
     pass
 
 
-def trap_enemy_ability(user, target, game_state):
+def trap_enemy_ability(target, weapon):
+    weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
+    if random_chance(weapon_trigger_chance):
+        monster_on_going_effects["Trapped"]["Duration"] = All_items[weapon]["Duration"]
+        monster_on_going_effects["Trapped"]["Amount"] = True
     pass
 
 
-def squeak_noise_ability(user, target, game_state):
-    # Assuming 'Squeaky Hammer' weapon - more for fun, may not need a combat effect
+def squeak_noise_ability(target, weapon):
+    type_effect("*Squeek*")
     pass
 
 
-def rapid_fire_ability(user, target, game_state):
+def rapid_fire_ability(target, weapon):
     # Assuming 'AK-47' weapon
     pass
 
 
-def soft_block_ability(user, target, game_state):
-    # Assuming 'Pillow' weapon
-    pass
+def soft_block_ability(target, weapon, damage=0):
+    weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
+    if random_chance(weapon_trigger_chance):
+        print("Triggering shield special ability")
+        damage_reduced = math.ceil(
+            damage*(All_items[weapon]["Damage Reduction"] / 100))
+        type_effect(
+            f"{All_items[weapon]['Ability Name']} Activated: {damage_reduced} reduced!")
+        new_damage = damage - damage_reduced
+        print()
+        return new_damage
+    else:
+        return damage
 
 
-def knowledge_strike_ability(user, target, game_state):
+def knowledge_strike_ability(user, target):
     # Assuming 'Book' weapon
     # Logic for revealing clues or spells
     pass
 
 
-def stealth_mode_ability(user, target, game_state):
+def stealth_mode_ability(user, target):
     # Assuming a deliberate action, not a chance-based trigger
     # user.status_effects['stealth_mode'] = 2  # User becomes invisible for 2 turns
     pass
@@ -271,19 +306,25 @@ item_abilities = {
 }
 
 
-def trigger_weapon_ability(target):
-    equipped_weapon_name = equiped_gear.get("Weapon")
+def trigger_weapon_shield_ability(target, type=0, damage=0):
+    # Type 0 for weapon, type 1 for shield
+    weapon_types = ["Weapon", "Shield"]
+    weapon_type = weapon_types[type]
+
+    equipped_weapon_name = equiped_gear.get(weapon_type)
     if equipped_weapon_name is not None:
+        print(f"Equipped {weapon_type}: {equipped_weapon_name}")
 
-        item_trigger_ability = item_abilities[equipped_weapon_name]
+        item_trigger_ability = item_abilities.get(equipped_weapon_name)
 
-        if item_trigger_ability is not None and "Special Trigger" in All_items[equipped_weapon_name]:
+        if weapon_type == "Weapon":
+            print("Triggering weapon ability")
             item_trigger_ability(target, equipped_weapon_name)
 
-
-def trigger_shield_ability(target):
-    equipped_items = get_equipped_items()
-    if equipped_items["Name"] == "Shield":
-        weapon = equipped_items["Shield"]
-        item_trigger_ability = item_abilities[equipped_items]
-        item_trigger_ability(weapon, target)
+        elif item_trigger_ability is not None and "Special Trigger" in All_items[equipped_weapon_name]:
+            print("Triggering shield special ability")
+            return item_trigger_ability(target, equipped_weapon_name, damage)
+        else:
+            print("No valid trigger condition")
+    else:
+        print(f"No {weapon_type} equipped")
