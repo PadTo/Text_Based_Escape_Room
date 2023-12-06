@@ -92,9 +92,21 @@ def reflect_damage_ability(target, weapon, damage=0):
     else:
         return damage
 
+# CrossBow of Silence
+
 
 def silence_ability(target, weapon):
-    pass
+    weapon_stats = All_items[weapon]
+    type_effect(f"The enemy has been silenced for {weapon_stats['Duration']}")
+    effect_name = weapon_stats["Ability Name"]
+    duration = weapon_stats["Duration"]
+    if effect_name in monster_on_going_effects:
+        user_on_going_effects[effect_name]["Duration"] += duration
+    else:
+        user_on_going_effects[effect_name] = {
+            "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+
+# Magic wand ability
 
 
 def cast_random_spell_ability(target, weapon):
@@ -125,35 +137,73 @@ def cast_random_spell_ability(target, weapon):
 
 
 def thunder_strike_ability(target, weapon):
-    weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
+
+    weapon_stats = All_items[weapon]
+    weapon_trigger_chance = weapon_stats["Trigger Chance"]
+
     if random_chance(weapon_trigger_chance):
-        target["Thunder Strike"]["Duration"] = 1
-        target["Thunder Strike"]["Amount"] = True
+        type_effect(f"Triggering {weapon_stats['Ability Name']}!")
+        type_effect(
+            f"You dealt {weapon_stats['Extra Damage']} damage to the {target['Name']}")
+        print()
+        target["Health"] -= weapon_stats["Extra Damage"]
 
 
+# Dual dagger ability
 def extra_attack_ability(target, weapon):
     # This ability might be based on turn count rather than chance
+    return
+
+
+# Banana ability
+def make_enemy_slip_ability(target, weapon):
+    weapon_stats = All_items[weapon]
+    weapon_trigger_chance = weapon_stats["Trigger Chance"]
+
+    if random_chance(weapon_trigger_chance):
+        type_effect(
+            f"The enemy has slipped and hit its head.. He won't be able to move for {weapon_stats['Duration']} turns.")
+        effect_name = weapon_stats["Ability Name"]
+        duration = weapon_stats["Duration"]
+        if effect_name in monster_on_going_effects:
+            monster_on_going_effects[effect_name]["Duration"] += duration
+        else:
+            monster_on_going_effects[effect_name] = {
+                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+    else:
+        type_effect("The cast has been unsuccessful...")
+
+
+def distract_enemy_ability(target, weapon):
     pass
 
-
-def make_enemy_slip_ability(user, target):
-    pass
+# Bubble Blower ability
 
 
-def distract_enemy_ability(user, target):
-    pass
+def trap_enemy_ability(target, weapon):
+    weapon_stats = All_items[weapon]
+    weapon_trigger_chance = weapon_stats["Trigger Chance"]
+    if random_chance(weapon_trigger_chance):
+        type_effect(
+            f"The enemy has been trapped for {weapon_stats['Duration']} turns.")
+        effect_name = weapon_stats["Ability Name"]
+        duration = weapon_stats["Duration"]
+        if effect_name in monster_on_going_effects:
+            monster_on_going_effects[effect_name]["Duration"] += duration
+        else:
+            monster_on_going_effects[effect_name] = {
+                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+    else:
+        type_effect("The cast has been unsuccessful...")
 
 
-def entangle_enemy_ability(user, target):
-    pass
-
-
+# Magic Yo-Yo ability
 def return_strike_ability(user, target):
     # Assuming 'Magic Yo-Yo' weapon
     pass
 
 
-def trap_enemy_ability(target, weapon):
+def entangle_enemy_ability(target, weapon):
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
         monster_on_going_effects["Trapped"]["Duration"] = All_items[weapon]["Duration"]

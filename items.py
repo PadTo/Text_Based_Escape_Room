@@ -77,9 +77,9 @@ All_items = {
         "Weapon Type": "Crossbow",
         "Attack Damage": 30,
         "Ability Name": "Silence",
-        "Special Cast": "Silences the enemy for 2 turns, preventing them from using special abilities",
+        "Special Cast": "Silences the enemy for 3 turns, preventing them from using special abilities",
         "Cooldown": 5,
-        "Duration": 2,
+        "Duration": 3,
         "Trigger Chance": None  # Special cast, not a random trigger
     },
     "Mystic Wand": {
@@ -95,8 +95,9 @@ All_items = {
         "Weapon Type": "Hammer",
         "Attack Damage": 40,
         "Ability Name": "Thunder Strike",
-        "Special Trigger": "15% chance to summon a thunder strike, dealing extra 20 damage",
+        "Special Trigger": "15% chance to summon a thunder strike, dealing extra 70 damage",
         "Trigger Chance": 15
+        "Extra Damage": 70
     },
     "Dual Daggers": {
         "Type": "Weapon",
