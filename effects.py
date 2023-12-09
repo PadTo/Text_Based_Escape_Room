@@ -9,6 +9,7 @@ user_on_going_effects = {
     "Extra Attack": {"Amount": False, "Duration": 0, "Item": {}},
     "Frozen": {"Amount": False, "Duration": 0, "Item": {}},
     "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
+    "Stealth": {"Amount": False, "Duration": 0, "Item": {}}
 
 }
 
@@ -16,34 +17,66 @@ monster_on_going_effects = {
     "Extra Attack": {"Amount": False, "Duration": 0, "Item": {}},
     "Frozen": {"Amount": False, "Duration": 0, "Item": {}},
     "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
+    "Stealth": {"Amount": False, "Duration": 0, "Item": {}},
     "Double Loot Boost": {"Amount": False, "Duration": 0, "Item": {}},
 
 }
 
+user_cooldowns = {
+    "Trap": {"Cooldown": 0, "Item": {}},
+    "Stealth": {"Cooldown": 0, "Item": {}},
+    "Silence": {"Cooldown": 0, "Item": {}},
+}
+
+monster_cooldowns = {
+    "Trap": {"Cooldown": 0, "Item": {}},
+    "Stealth": {"Cooldown": 0, "Item": {}},
+    "Silence": {"Cooldown": 0, "Item": {}},
+
+}
+
+
 non_removable_effects = {"Frozen", "Stunned",
                          "Double Loot Boost", "Extra Attack"}
+
+static_effect = ["Frozen", "Stunned", "Slip", "Trap"]
 
 
 def user_effects_timer():
     for effect, details in user_on_going_effects.items():
         if details["Duration"] > 0:
             user_on_going_effects[effect]["Duration"] -= 1
-            if details["Duration"] <= 0 and effect not in non_removable_effects:
+            if details["Duration"] <= 0:
 
-                if effect == "Frozen":
+                if effect == "Frozen" and user_on_going_effects[effect]["Amount"] == True:
                     user_on_going_effects[effect]["Amount"] = False
+                    user_on_going_effects[effect]["Item"] = {}
                     type_effect(
                         "The frost has melted, you can now finally move!")
                     print()
-                if effect == "Stunned":
+                if effect == "Stunned" and user_on_going_effects[effect]["Amount"] == True:
                     user_on_going_effects[effect]["Amount"] = False
+                    user_on_going_effects[effect]["Item"] = {}
                     type_effect("The stun has worn off, attack with rage!")
                     print()
 
-                if "Multiplier" in All_items[details["Item"]]:
+                if effect == "Slip" and user_on_going_effects[effect]["Amount"] == True:
+                    user_on_going_effects[effect]["Amount"] = False
+                    user_on_going_effects[effect]["Item"] = {}
+                    type_effect(
+                        "The headache has worn off, you can now finally move!")
+                    print()
+                if effect == "Trap" and user_on_going_effects[effect]["Amount"] == True:
+                    user_on_going_effects[effect]["Amount"] = False
+                    user_on_going_effects[effect]["Item"] = {}
+                    type_effect("The trap has worn off, attack with rage!")
+                    print()
+
+                if effect == "Double Damage":
                     stat_decrease(
                         None, All_items[details["Item"]]["Multiplier"], 1)
-                else:
+
+                if details["Item"] != {} and effect not in static_effect:
                     stat_decrease(details["Item"])
 
 
@@ -52,7 +85,34 @@ def monster_effects_timer():
         if details["Duration"] > 0:
             monster_on_going_effects[effect]["Duration"] -= 1
             if details["Duration"] <= 0 and effect not in non_removable_effects:
-                stat_decrease(details["Item"])
+
+                if effect == "Frozen":
+                    monster_on_going_effects[effect]["Amount"] = False
+                    type_effect(
+                        "The frost has melted, the enemy can now finally move..")
+                    print()
+                if effect == "Stunned":
+                    monster_on_going_effects[effect]["Amount"] = False
+                    type_effect(
+                        "The stun has worn off, the enemy can now attack with rage!")
+                    print()
+
+                if effect == "Slip":
+                    monster_on_going_effects[effect]["Amount"] = False
+                    type_effect(
+                        "The headache has worn off, the enemy can now attack!")
+                    print()
+                if effect == "Trap":
+                    monster_on_going_effects[effect]["Amount"] = False
+                    type_effect(
+                        "The trap has worn off, the enemy can now attack")
+                    print()
+
+                if effect == "Silence":
+                    monster_on_going_effects[effect]["Amount"] = False
+                    type_effect(
+                        "The silence has worn off, the enemy can now cast spells!")
+                    print()
 
 
 def reset_effects():
@@ -64,6 +124,7 @@ def reset_effects():
         "Extra Attack": {"Amount": False, "Duration": 0, "Item": {}},
         "Frozen": {"Amount": False, "Duration": 0, "Item": {}},
         "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
+        "Stealth": {"Amount": False, "Duration": 0, "Item": {}}
         # Add other effects as needed
     }
 
@@ -71,35 +132,49 @@ def reset_effects():
         "Extra Attack": {"Amount": False, "Duration": 0, "Item": {}},
         "Frozen": {"Amount": False, "Duration": 0, "Item": {}},
         "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
+        "Stealth": {"Amount": False, "Duration": 0, "Item": {}},
         "Double Loot Boost": {"Amount": False, "Duration": 0, "Item": {}},
         # Add other effects as needed
     }
 
 
 def cant_move(type=0):
-    # Type 0 is for player, and Type 1 is for monster
-    # Text chooses type of text, 0 is for player and 1 is for monster
-    type_text = ["You are frozen and can't move..", "You are Stunned and can't move..",
-                 "The enemy is frozen and can't move!", "The enemy is stunned and can't move!"]
-    n = 1  # This is if there are any other effect added later in the game so that the messages can be easily displayed and added
-    if type == 0:
-        type_text = type_text[0:n]
-        on_going_effects = user_on_going_effects
-    else:
-        type_text = type_text[n + 1:len(type_text)]
-        on_going_effects = monster_on_going_effects
+    # Messages for player and monster effects
+    effect_messages = {
+        "Frozen": ["You are frozen and can't move..", "The enemy is frozen and can't move!"],
+        "Stunned": ["You are stunned and can't move..", "The enemy is stunned and can't move!"],
+        "Slip": ["You have slipped, hit your head and can't move...", "The enemy has slipped, hit its head and can't move..."],
+        "Trap": ["You are trapped...", "The enemy is trapped..."]
+    }
 
+    # Choose the correct effects dictionary based on type
+    on_going_effects = user_on_going_effects if type == 0 else monster_on_going_effects
+
+    # Check each effect
     for effect, details in on_going_effects.items():
-        if effect == "Frozen":
-            if details["Duration"] > 0:
-                type_effect(type_text[0])
-                print()
-                return True
-
-        if effect == "Stunned":
-            if details["Duration"] > 0:
-                type_effect(type_text[1])
-                print()
-                return True
+        if details["Duration"] > 0 and effect in effect_messages:
+            type_effect(effect_messages[effect][type])
+            print()
+            return True
 
     return False  # Return False if no relevant effect is found
+
+
+def cooldowns_effect_timer():
+    for effect, details in user_cooldowns.items():
+        if details["Cooldown"] > 0:
+            details["Cooldown"] -= 1
+
+            if details["Cooldown"] == 0 and details["Item"]:
+                type_effect(f"{details['Item']} is now ready to use again.")
+                details["Item"] = {}  # Reset the item key if needed
+
+
+def monster_cooldowns_effect_timer():
+    for effect, details in monster_cooldowns.items():
+        if details["Cooldown"] > 0:
+            details["Cooldown"] -= 1
+
+            if details["Cooldown"] == 0 and details["Item"]:
+                type_effect(f"{details['Item']} is now ready to use again.")
+                details["Item"] = {}  # Reset the item key if needed

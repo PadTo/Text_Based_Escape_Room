@@ -164,13 +164,24 @@ def equip(item):
             equip_message(item)
             print()
 
-        elif item_stats["Weapon Type"] == "Shield":
+        elif item_stats["Type"] == "Weapon" and item_stats["Weapon Type"] == "Shield":
             if equiped_gear["Shield"] != None:
                 unequip_message(equiped_gear["Shield"])
 
             stat_decrease(equiped_gear["Shield"])
             print()
             equiped_gear["Shield"] = item
+            stat_increase(item)
+            equip_message(item)
+            print()
+
+        elif item_stats["Type"] == "Misc":
+            if equiped_gear["Misc"] != None:
+                unequip_message(equiped_gear["Misc"])
+
+            stat_decrease(equiped_gear["Misc"])
+            print()
+            equiped_gear["Misc"] = item
             stat_increase(item)
             equip_message(item)
             print()
@@ -370,7 +381,10 @@ def check_if_equiped_item_abilities_true():
             spell_index = int(input(
                 "Select a spell to use (enter the number): "))
             if spell_index < len(store_weapons):
-                item_abilities[store_weapons[spell_index]]
+                selected_weapon = store_weapons[spell_index]
+                ability_function = item_abilities[selected_weapon]
+                ability_function(None, selected_weapon)
+
                 return True
             else:
                 type_effect(

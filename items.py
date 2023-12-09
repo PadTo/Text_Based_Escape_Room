@@ -9,18 +9,7 @@ All_items = {
         "Duration": 2,
         "Trigger Chance": 100  # in percent
     },
-    "AK-47": {
-        "Type": "Weapon",
-        "Weapon Type": "Gun",
-        "Attack Damage": 35,  # per shot
-        "Ability Name": "Rapid Fire",
-        "Special Cast": "Shoots bullets rapidly dealing 90 damage, but using up 15 ammo",
-        "Ammo Capacity": 30,
-        "Cooldown": 3,
-        "Ammo Needed": 15,
-        "Note": "Requires ammo to use",
-        "Trigger Chance": None  # No random trigger chance
-    },
+
     "Ashbringer": {
         "Type": "Weapon",
         "Weapon Type": "Sword",
@@ -57,15 +46,7 @@ All_items = {
         "Trigger Chance": 100,
         "Damage Reduction": 25  # Percentage
     },
-    "Book": {
-        "Type": "Weapon",
-        "Weapon Type": "Misc",
-        "Attack Damage": 10,
-        "Ability Name": "Knowledge Strike",
-        "Special Cast": "Can contain clues or spells",
-        "Cooldown": 4,
-        "Trigger Chance": None  # Special cast, not a random trigger
-    },
+
     "Rock": {
         "Type": "Weapon",
         "Weapon Type": "Thrown",
@@ -96,36 +77,21 @@ All_items = {
         "Attack Damage": 40,
         "Ability Name": "Thunder Strike",
         "Special Trigger": "15% chance to summon a thunder strike, dealing extra 70 damage",
-        "Trigger Chance": 15
+        "Trigger Chance": 100,
         "Extra Damage": 70
     },
-    "Dual Daggers": {
-        "Type": "Weapon",
-        "Weapon Type": "Dagger",
-        "Attack Damage": 25,  # Combined
-        "Ability Name": "Extra Attack",
-        "Special Trigger": "Grants an extra attack every third turn",
-        "Trigger Chance": None  # Triggered by turn count, not random chance
-    },
+
+
     "Banana Peel": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
         "Attack Damage": 5,
         "Ability Name": "Slip",
-        "Special Trigger": "50% chance to make the enemy slip, causing them to lose a turn",
-        "Duration": 1,
-        "Trigger Chance": 50
-    },
-    "Rubber Chicken": {
-        "Type": "Weapon",
-        "Weapon Type": "Whacky",
-        "Attack Damage": 10,
-        "Ability Name": "Distract",
-        "Special Cast": "Can be used to distract enemies, increasing your dodge chance by 30% for 2 turns",
+        "Special Trigger": "50% chance to make the enemy slip, causing them to lose 2 turns",
         "Duration": 2,
-        "Cooldown": 4,
-        "Trigger Chance": None  # Special cast, not a random trigger
+        "Trigger Chance": 100
     },
+
     "Spaghetti Whip": {
         "Type": "Weapon",
         "Weapon Type": "Whacky",
@@ -133,7 +99,7 @@ All_items = {
         "Ability Name": "Entangle",
         "Special Trigger": "20% chance to entangle the enemy, reducing their attack damage by 10 for 3 turns",
         "Duration": 3,
-        "Trigger Chance": 20
+        "Trigger Chance": 100
     },
     "Magic Yo-Yo": {
         "Type": "Weapon",
@@ -141,7 +107,7 @@ All_items = {
         "Attack Damage": 20,
         "Ability Name": "Return Strike",
         "Special Trigger": "30% chance to return to the player after an attack, allowing for an immediate second strike",
-        "Trigger Chance": 30
+        "Trigger Chance": 100
     },
     "Bubble Blower": {
         "Type": "Weapon",
@@ -151,7 +117,7 @@ All_items = {
         "Special Cast": "Blows bubbles that have a 40% chance to trap the enemy for 4 turns",
         "Duration": 4,
         "Cooldown": 4,
-        "Trigger Chance": 40
+        "Trigger Chance": 100
     },
     "Squeaky Hammer": {
         "Type": "Weapon",
@@ -194,9 +160,10 @@ All_items = {
         "Type": "Misc",
         "Defence": 5,
         "Dodge": 10,
-        "Ability Name": "Stealth Mode",
+        "Ability Name": "Stealth",
         "Special Cast": "Can be used for stealth or disguise, turns you invisible for 2 rounds",
-        "Cooldown": 5
+        "Cooldown": 5,
+        "Duration": 2
     },
     # Footwear
     "Leather Boots": {

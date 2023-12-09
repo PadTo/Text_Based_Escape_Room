@@ -64,7 +64,7 @@ def stat_decrease(item=None, multiplier=0, lower_character_multiplier=0):
             f"Damage multiplier deactivated ({multiplier}x damage decrease). New total: {character_stats['Attack']}.")
 
     else:
-        if item is None or item not in All_items:
+        if item is None:
             return
         else:
             item_attributes = All_items[item]

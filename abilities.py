@@ -1,9 +1,9 @@
 import random
-from effects import monster_on_going_effects, user_on_going_effects
+from effects import *
 from items import *
 from inventory import *
 from stats import *
-from character import equiped_gear
+from character import equiped_gear, character_stats
 import math
 
 spell_names = ["Breathing Fire",
@@ -43,7 +43,7 @@ def random_chance(chance):
 # Frostmourne
 
 
-def freeze_ability(target, weapon):
+def freeze_ability(target, weapon, damage=0):
     if target["Name"] == "Lich King":
         type_effect(f"{All_items[weapon]['Ability Name']} Ability Triggered!")
         type_effect(
@@ -57,7 +57,7 @@ def freeze_ability(target, weapon):
 # Ashbringer
 
 
-def double_damage_ability(target, weapon):
+def double_damage_ability(target, weapon, damage=0):
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
         user_on_going_effects
@@ -95,21 +95,28 @@ def reflect_damage_ability(target, weapon, damage=0):
 # CrossBow of Silence
 
 
-def silence_ability(target, weapon):
+def silence_ability(target, weapon, damage=0):
     weapon_stats = All_items[weapon]
-    type_effect(f"The enemy has been silenced for {weapon_stats['Duration']}")
     effect_name = weapon_stats["Ability Name"]
     duration = weapon_stats["Duration"]
-    if effect_name in monster_on_going_effects:
-        user_on_going_effects[effect_name]["Duration"] += duration
-    else:
-        user_on_going_effects[effect_name] = {
-            "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+    if user_cooldowns[effect_name]["Cooldown"] <= 0:
 
+        type_effect(
+            f"The enemy has been silenced for {weapon_stats['Duration']} turns.")
+        user_cooldowns[effect_name] = {
+            "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
+        if effect_name in monster_on_going_effects:
+            monster_on_going_effects[effect_name]["Duration"] += duration
+        else:
+            monster_on_going_effects[effect_name] = {
+                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+    else:
+        type_effect(f"The {effect_name} is on cooldown...")
+        return False
 # Magic wand ability
 
 
-def cast_random_spell_ability(target, weapon):
+def cast_random_spell_ability(target, weapon, damage=0):
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
 
     if random_chance(weapon_trigger_chance):
@@ -136,7 +143,7 @@ def cast_random_spell_ability(target, weapon):
 # Thunder Hammer
 
 
-def thunder_strike_ability(target, weapon):
+def thunder_strike_ability(target, weapon, damage=0):
 
     weapon_stats = All_items[weapon]
     weapon_trigger_chance = weapon_stats["Trigger Chance"]
@@ -149,14 +156,8 @@ def thunder_strike_ability(target, weapon):
         target["Health"] -= weapon_stats["Extra Damage"]
 
 
-# Dual dagger ability
-def extra_attack_ability(target, weapon):
-    # This ability might be based on turn count rather than chance
-    return
-
-
 # Banana ability
-def make_enemy_slip_ability(target, weapon):
+def make_enemy_slip_ability(target, weapon, damage=0):
     weapon_stats = All_items[weapon]
     weapon_trigger_chance = weapon_stats["Trigger Chance"]
 
@@ -174,51 +175,61 @@ def make_enemy_slip_ability(target, weapon):
         type_effect("The cast has been unsuccessful...")
 
 
-def distract_enemy_ability(target, weapon):
-    pass
-
 # Bubble Blower ability
 
 
-def trap_enemy_ability(target, weapon):
+def trap_enemy_ability(target, weapon, damage=0):
+    weapon_stats = All_items[weapon]
+    effect_name = weapon_stats["Ability Name"]
+    duration = weapon_stats["Duration"]
+
+    if user_cooldowns[effect_name]["Cooldown"] <= 0:
+
+        weapon_trigger_chance = weapon_stats["Trigger Chance"]
+        if random_chance(weapon_trigger_chance):
+            type_effect(
+                f"The enemy has been trapped for {weapon_stats['Duration']} turns.")
+            user_cooldowns[effect_name] = {
+                "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
+            if effect_name in monster_on_going_effects:
+                monster_on_going_effects[effect_name]["Duration"] += duration
+            else:
+                monster_on_going_effects[effect_name] = {
+                    "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+
+        else:
+            type_effect("The cast has been unsuccessful...")
+    else:
+        type_effect(f"The {effect_name} is on cooldown...")
+        return False
+
+
+# Magic Yo-Yo ability
+def return_strike_ability(target, weapon, damage):
     weapon_stats = All_items[weapon]
     weapon_trigger_chance = weapon_stats["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
         type_effect(
-            f"The enemy has been trapped for {weapon_stats['Duration']} turns.")
-        effect_name = weapon_stats["Ability Name"]
-        duration = weapon_stats["Duration"]
-        if effect_name in monster_on_going_effects:
-            monster_on_going_effects[effect_name]["Duration"] += duration
-        else:
-            monster_on_going_effects[effect_name] = {
-                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
-    else:
-        type_effect("The cast has been unsuccessful...")
+            f"You have dealt {damage} to the {target['Name']}")
+        type_effect(f"Remaining {target['Name']} health: {target['Health']}")
+
+        print()
+        type_effect(f"Triggering {weapon_stats['Ability Name']}!")
 
 
-# Magic Yo-Yo ability
-def return_strike_ability(user, target):
-    # Assuming 'Magic Yo-Yo' weapon
-    pass
-
-
-def entangle_enemy_ability(target, weapon):
+def entangle_enemy_ability(target, weapon, damage=0):
+    weapon_stats = All_items[weapon]
+    duration = weapon_stats["Duration"]
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
-        monster_on_going_effects["Trapped"]["Duration"] = All_items[weapon]["Duration"]
-        monster_on_going_effects["Trapped"]["Amount"] = True
-    pass
+        type_effect(
+            f"The enemy has been entangled for {weapon_stats['Duration']} turns.")
+        monster_on_going_effects["Trap"] = {
+            "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
 
 
-def squeak_noise_ability(target, weapon):
+def squeak_noise_ability(target, weapon, damage):
     type_effect("*Squeek*")
-    pass
-
-
-def rapid_fire_ability(target, weapon):
-    # Assuming 'AK-47' weapon
-    pass
 
 
 def soft_block_ability(target, weapon, damage=0):
@@ -236,16 +247,25 @@ def soft_block_ability(target, weapon, damage=0):
         return damage
 
 
-def knowledge_strike_ability(user, target):
-    # Assuming 'Book' weapon
-    # Logic for revealing clues or spells
-    pass
+def stealth_mode_ability(target, weapon, damage=0):
 
+    weapon_stats = All_items[weapon]
+    effect_name = weapon_stats["Ability Name"]
+    duration = weapon_stats["Duration"]
 
-def stealth_mode_ability(user, target):
-    # Assuming a deliberate action, not a chance-based trigger
-    # user.status_effects['stealth_mode'] = 2  # User becomes invisible for 2 turns
-    pass
+    if user_cooldowns[effect_name]["Cooldown"] <= 0:
+
+        user_cooldowns[effect_name] = {
+            "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
+
+        if effect_name in user_on_going_effects:
+            user_on_going_effects[effect_name]["Duration"] += duration
+        else:
+            user_on_going_effects[effect_name] = {
+                "Amount": True, "Duration": duration, "Item": weapon}
+    else:
+        type_effect(f"The {effect_name} is on cooldown...")
+        return False
 
 
 def increase_dodge_chance_potion_ability(potion, user, target, game_state="Combat"):
@@ -333,16 +353,12 @@ item_abilities = {
     "Crossbow of Silence": silence_ability,
     "Mystic Wand": cast_random_spell_ability,
     "Thunder Hammer": thunder_strike_ability,
-    "Dual Daggers": extra_attack_ability,
     "Banana Peel": make_enemy_slip_ability,
-    "Rubber Chicken": distract_enemy_ability,
     "Spaghetti Whip": entangle_enemy_ability,
     "Magic Yo-Yo": return_strike_ability,
     "Bubble Blower": trap_enemy_ability,
     "Squeaky Hammer": squeak_noise_ability,
-    "AK-47": rapid_fire_ability,
     "Pillow": soft_block_ability,
-    "Book": knowledge_strike_ability,
     "Blanket": stealth_mode_ability,
     "Potion of Dodge Chance": increase_dodge_chance_potion_ability,
     "Potion of Defence": temporary_defence_boost_potion_ability,
@@ -367,9 +383,9 @@ def trigger_weapon_shield_ability(target, type=0, damage=0):
 
         item_trigger_ability = item_abilities.get(equipped_weapon_name)
 
-        if weapon_type == "Weapon":
+        if weapon_type == "Weapon" and "Special Trigger" in All_items[equipped_weapon_name]:
             print("Triggering weapon ability")
-            item_trigger_ability(target, equipped_weapon_name)
+            item_trigger_ability(target, equipped_weapon_name, damage)
 
         elif item_trigger_ability is not None and "Special Trigger" in All_items[equipped_weapon_name]:
             print("Triggering shield special ability")

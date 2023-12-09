@@ -25,8 +25,9 @@ def combat_round(attacker, defender, player_turn):
         print()
     else:
         if player_turn:
-            trigger_weapon_shield_ability(defender, type=0)
+
             damage = calculate_damage(attacker["Attack"], defender["Defence"])
+            trigger_weapon_shield_ability(defender, type=0, damage=damage)
             defender["Health"] -= damage
             attacker_name = attacker["Name"]
             deffender_name = defender["Name"]
@@ -34,38 +35,46 @@ def combat_round(attacker, defender, player_turn):
             type_effect(f"{deffender_name} Health: {defender['Health']}")
             print()
         elif not player_turn:
-            if equiped_gear["Shield"] is not None:
 
-                if "Special Trigger" in All_items[equiped_gear["Shield"]]:
+            if user_on_going_effects["Stealth"]["Duration"] > 0:
+                type_effect(
+                    f"The {attacker['Name']} can't attack you as you are hidden.")
+
+            else:
+                if equiped_gear["Shield"] is not None:
+
+                    if "Special Trigger" in All_items[equiped_gear["Shield"]]:
+                        damage = calculate_damage(
+                            attacker["Attack"], defender["Defence"])
+                        new_damage = trigger_weapon_shield_ability(
+                            attacker, type=1, damage=damage)
+                        # print(new_damage)
+                        attacker_name = attacker["Name"]
+                        deffender_name = defender["Name"]
+
+                        if attacker["Health"] > 0:
+                            type_effect(
+                                f"{attacker_name} attacks for {new_damage} damage!")
+                            defender["Health"] -= new_damage
+                            type_effect(
+                                f"{deffender_name} Health: {defender['Health']}")
+                            print()
+                        else:
+                            do_nothing = []
+
+                    else:
+                        pass
+                else:
                     damage = calculate_damage(
                         attacker["Attack"], defender["Defence"])
-                    new_damage = trigger_weapon_shield_ability(
-                        attacker, type=1, damage=damage)
-                    # print(new_damage)
+                    defender["Health"] -= damage
                     attacker_name = attacker["Name"]
                     deffender_name = defender["Name"]
-
-                    if attacker["Health"] > 0:
-                        type_effect(
-                            f"{attacker_name} attacks for {new_damage} damage!")
-                        defender["Health"] -= new_damage
-                        type_effect(
-                            f"{deffender_name} Health: {defender['Health']}")
-                        print()
-                    else:
-                        do_nothing = []
-
-                else:
-                    pass
-            else:
-                damage = calculate_damage(
-                    attacker["Attack"], defender["Defence"])
-                defender["Health"] -= damage
-                attacker_name = attacker["Name"]
-                deffender_name = defender["Name"]
-                type_effect(f"{attacker_name} attacks for {damage} damage!")
-                type_effect(f"{deffender_name} Health: {defender['Health']}")
-                print()
+                    type_effect(
+                        f"{attacker_name} attacks for {damage} damage!")
+                    type_effect(
+                        f"{deffender_name} Health: {defender['Health']}")
+                    print()
 
 
 def player_action(player, monster, player_turn, game_state):
@@ -124,42 +133,40 @@ def combat(player, monster, game_state="Combat"):
     stats_before_combat = character_stats_before_combat(character_stats)
 
     while player["Health"] > 0 and monster["Health"] > 0:
-
+        # Player's turn
         if player_turn:
-            turn_tracker += 1
-
-            if cant_move(0):
-                do_nothing = []
-                monster_effects_timer()
-            else:
+            if not cant_move(0):
                 player_action(player, monster, player_turn, game_state)
-                monster_effects_timer()
+
+        # Monster's turn
         else:
-            if cant_move(1):
-                user_effects_timer()
-                do_nothing = []
-            else:
+            if not cant_move(1):
                 combat_round(monster, player, player_turn)
-                if monster["Health"] < 0:
-                    break
 
-                user_effects_timer()
-
+        # Check for game state change (e.g., running away)
         if game_state != "Combat":
             type_effect("You have run away, coward...")
-            game_state = "Exploration"
             break
 
+        # Process end-of-turn events
+        if player_turn:
+            monster_effects_timer()  # Decrement monster's effects
+            cooldowns_effect_timer()  # Decrement player's cooldowns
+        else:
+            user_effects_timer()      # Decrement player's effects
+            monster_cooldowns_effect_timer()  # Decrement monster's cooldowns
+
+        # Toggle turn
         player_turn = not player_turn
 
+    # Handle end of combat
     if player["Health"] > 0:
         type_effect("You have defeated the enemy, congratulations!")
-        game_state = "Exploration"
         current_health = health_after_combat()
         character_stats = stats_before_combat
         character_stats["Health"] = current_health
-        game_state = "Exploration"
-
     else:
         type_effect("You have died...")
-        game_state = "Dead"
+
+    game_state = "Exploration" if player["Health"] > 0 else "Dead"
+    return game_state
