@@ -58,7 +58,7 @@ def stat_increase(item=None, multiplier=0, boost_character_multiplier=0):
 
 def stat_decrease(item=None, multiplier=0, lower_character_multiplier=0):
 
-    if lower_character_multiplier == 1:
+    if lower_character_multiplier == 1:  # 1 means that it decreases damage based on the multiplier, 0 skips this line of code
         character_stats["Attack"] = character_stats["Attack"]/multiplier
         type_effect(
             f"Damage multiplier deactivated ({multiplier}x damage decrease). New total: {character_stats['Attack']}.")

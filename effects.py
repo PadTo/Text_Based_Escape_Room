@@ -74,10 +74,11 @@ def user_effects_timer():
 
                 if effect == "Double Damage":
                     stat_decrease(
-                        None, All_items[details["Item"]]["Multiplier"], 1)
+                        details["Item"], All_items[details["Item"]]["Multiplier"], 1)
 
-                if details["Item"] != {} and effect not in static_effect:
-                    stat_decrease(details["Item"])
+                if effect != "Double Damage":
+                    if details["Item"] != {} and effect not in static_effect:
+                        stat_decrease(details["Item"])
 
 
 def monster_effects_timer():

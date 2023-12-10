@@ -6,6 +6,14 @@ from stats import *
 from character import equiped_gear, character_stats
 import math
 
+# This is because the combat currently only accounts for e.g. 3 rounds when an effect has to continue for 4 rounds
+
+
+def duration_mod(duration):
+    duration += 1
+    return duration
+
+
 spell_names = ["Breathing Fire",
                "Collosal Throw",
                "Rejuvination",
@@ -106,10 +114,11 @@ def silence_ability(target, weapon, damage=0):
         user_cooldowns[effect_name] = {
             "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
         if effect_name in monster_on_going_effects:
-            monster_on_going_effects[effect_name]["Duration"] += duration
+            monster_on_going_effects[effect_name]["Duration"] += duration_mod(
+                duration)
         else:
             monster_on_going_effects[effect_name] = {
-                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+                "Amount": True, "Duration": duration_mod(duration), "Item": weapon}
     else:
         type_effect(f"The {effect_name} is on cooldown...")
         return False
@@ -160,17 +169,18 @@ def thunder_strike_ability(target, weapon, damage=0):
 def make_enemy_slip_ability(target, weapon, damage=0):
     weapon_stats = All_items[weapon]
     weapon_trigger_chance = weapon_stats["Trigger Chance"]
+    duration = weapon_stats["Duration"]
 
     if random_chance(weapon_trigger_chance):
         type_effect(
-            f"The enemy has slipped and hit its head.. He won't be able to move for {weapon_stats['Duration']} turns.")
+            f"The enemy has slipped and hit its head.. He won't be able to move for {duration} turns.")
         effect_name = weapon_stats["Ability Name"]
-        duration = weapon_stats["Duration"]
         if effect_name in monster_on_going_effects:
-            monster_on_going_effects[effect_name]["Duration"] += duration
+            monster_on_going_effects[effect_name]["Duration"] += duration_mod(
+                duration)
         else:
             monster_on_going_effects[effect_name] = {
-                "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+                "Amount": True, "Duration": duration_mod(duration), "Item": weapon}
     else:
         type_effect("The cast has been unsuccessful...")
 
@@ -188,14 +198,15 @@ def trap_enemy_ability(target, weapon, damage=0):
         weapon_trigger_chance = weapon_stats["Trigger Chance"]
         if random_chance(weapon_trigger_chance):
             type_effect(
-                f"The enemy has been trapped for {weapon_stats['Duration']} turns.")
+                f"The enemy has been trapped for {duration} turns.")
             user_cooldowns[effect_name] = {
-                "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
+                "Cooldown": duration_mod(weapon_stats["Cooldown"]), "Item": weapon}
             if effect_name in monster_on_going_effects:
-                monster_on_going_effects[effect_name]["Duration"] += duration
+                monster_on_going_effects[effect_name]["Duration"] += duration_mod(
+                    duration)
             else:
                 monster_on_going_effects[effect_name] = {
-                    "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+                    "Amount": True, "Duration": duration_mod(duration), "Item": weapon}
 
         else:
             type_effect("The cast has been unsuccessful...")
@@ -211,10 +222,13 @@ def return_strike_ability(target, weapon, damage):
     if random_chance(weapon_trigger_chance):
         type_effect(
             f"You have dealt {damage} to the {target['Name']}")
+        target["Health"] -= damage
         type_effect(f"Remaining {target['Name']} health: {target['Health']}")
 
         print()
         type_effect(f"Triggering {weapon_stats['Ability Name']}!")
+
+# Spaghetti Whip ability
 
 
 def entangle_enemy_ability(target, weapon, damage=0):
@@ -223,9 +237,9 @@ def entangle_enemy_ability(target, weapon, damage=0):
     weapon_trigger_chance = All_items[weapon]["Trigger Chance"]
     if random_chance(weapon_trigger_chance):
         type_effect(
-            f"The enemy has been entangled for {weapon_stats['Duration']} turns.")
+            f"The enemy has been entangled for {duration} turns.")
         monster_on_going_effects["Trap"] = {
-            "Amount": True, "Duration": weapon_stats["Duration"], "Item": weapon}
+            "Amount": True, "Duration": duration_mod(duration), "Item": weapon}
 
 
 def squeak_noise_ability(target, weapon, damage):
@@ -255,8 +269,10 @@ def stealth_mode_ability(target, weapon, damage=0):
 
     if user_cooldowns[effect_name]["Cooldown"] <= 0:
 
+        type_effect(f"Casting {effect_name}!")
         user_cooldowns[effect_name] = {
-            "Cooldown": weapon_stats["Cooldown"], "Item": weapon}
+            "Cooldown": duration_mod(weapon_stats["Cooldown"]), "Item": weapon}
+        print()
 
         if effect_name in user_on_going_effects:
             user_on_going_effects[effect_name]["Duration"] += duration

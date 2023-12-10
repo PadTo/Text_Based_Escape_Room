@@ -39,6 +39,7 @@ def combat_round(attacker, defender, player_turn):
             if user_on_going_effects["Stealth"]["Duration"] > 0:
                 type_effect(
                     f"The {attacker['Name']} can't attack you as you are hidden.")
+                print()
 
             else:
                 if equiped_gear["Shield"] is not None:
@@ -151,10 +152,11 @@ def combat(player, monster, game_state="Combat"):
         # Process end-of-turn events
         if player_turn:
             monster_effects_timer()  # Decrement monster's effects
-            cooldowns_effect_timer()  # Decrement player's cooldowns
+            # cooldowns_effect_timer()  # Decrement player's cooldowns
         else:
             user_effects_timer()      # Decrement player's effects
             monster_cooldowns_effect_timer()  # Decrement monster's cooldowns
+            cooldowns_effect_timer()  # Decrement player's cooldowns
 
         # Toggle turn
         player_turn = not player_turn
