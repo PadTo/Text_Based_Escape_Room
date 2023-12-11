@@ -5,9 +5,9 @@ All_items = {
         "Weapon Type": "Sword",
         "Attack Damage": 50,
         "Ability Name": "Freeze",
-        "Special Trigger": "30% chance to freeze the enemy for 2 turns",
+        "Special Trigger": "50% chance to freeze the enemy for 2 turns",
         "Duration": 2,
-        "Trigger Chance": 30,  # Adjusted for balance
+        "Trigger Chance": 50,  # Adjusted for balance
         "Rarity": "Legendary"
     },
 
@@ -17,9 +17,9 @@ All_items = {
         "Attack Damage": 45,
         "Ability Name": "Double Damage",
         "Multiplier": 2,
-        "Special Trigger": "25% chance to deal double damage",
+        "Special Trigger": "50% chance to deal double damage",
         "Duration": 1,
-        "Trigger Chance": 25,  # Adjusted for balance
+        "Trigger Chance": 50,  # Adjusted for balance
         "Rarity": "Legendary"
     },
 

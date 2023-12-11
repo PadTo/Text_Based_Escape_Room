@@ -392,7 +392,7 @@ def check_if_equiped_item_abilities_true():
                     return True
                 else:
                     return True
-                return True
+
             else:
                 type_effect(
                     "Invalid input. If you want to take another action press any key (except numbers).")
