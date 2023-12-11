@@ -120,7 +120,8 @@ def silence_ability(target, weapon, damage=0):
             monster_on_going_effects[effect_name] = {
                 "Amount": True, "Duration": duration_mod(duration), "Item": weapon}
     else:
-        type_effect(f"The {effect_name} is on cooldown...")
+        type_effect(f"{effect_name} is on cooldown...")
+        type_effect("Choose another action:")
         return False
 # Magic wand ability
 
@@ -211,7 +212,8 @@ def trap_enemy_ability(target, weapon, damage=0):
         else:
             type_effect("The cast has been unsuccessful...")
     else:
-        type_effect(f"The {effect_name} is on cooldown...")
+        type_effect(f"{effect_name} is on cooldown...")
+        type_effect("Choose another action:")
         return False
 
 
@@ -280,7 +282,8 @@ def stealth_mode_ability(target, weapon, damage=0):
             user_on_going_effects[effect_name] = {
                 "Amount": True, "Duration": duration, "Item": weapon}
     else:
-        type_effect(f"The {effect_name} is on cooldown...")
+        type_effect(f"{effect_name} is on cooldown...")
+        type_effect("Choose another action:")
         return False
 
 
@@ -395,18 +398,20 @@ def trigger_weapon_shield_ability(target, type=0, damage=0):
 
     equipped_weapon_name = equiped_gear.get(weapon_type)
     if equipped_weapon_name is not None:
-        print(f"Equipped {weapon_type}: {equipped_weapon_name}")
+        # print(f"Equipped {weapon_type}: {equipped_weapon_name}")
 
         item_trigger_ability = item_abilities.get(equipped_weapon_name)
 
         if weapon_type == "Weapon" and "Special Trigger" in All_items[equipped_weapon_name]:
-            print("Triggering weapon ability")
+            # print("Triggering weapon ability")
             item_trigger_ability(target, equipped_weapon_name, damage)
 
         elif item_trigger_ability is not None and "Special Trigger" in All_items[equipped_weapon_name]:
-            print("Triggering shield special ability")
+            # print("Triggering shield special ability")
             return item_trigger_ability(target, equipped_weapon_name, damage)
         else:
-            print("No valid trigger condition")
+            # print("No valid trigger condition")
+            pass
     else:
-        print(f"No {weapon_type} equipped")
+        # print(f"No {weapon_type} equipped")
+        pass

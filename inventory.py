@@ -383,8 +383,15 @@ def check_if_equiped_item_abilities_true():
             if spell_index < len(store_weapons):
                 selected_weapon = store_weapons[spell_index]
                 ability_function = item_abilities[selected_weapon]
-                ability_function(None, selected_weapon)
+                result = ability_function(None, selected_weapon)
 
+                # Check the result and return accordingly
+                if result == False:
+                    return False
+                elif result == True:
+                    return True
+                else:
+                    return True
                 return True
             else:
                 type_effect(

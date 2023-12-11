@@ -4,7 +4,7 @@ from text_effect import type_effect
 
 def display_effects(item, number, quantity=0, display_type=0):
     current_item = All_items.get(item, {})
-    table_len = [75, 85, 150]
+    table_len = [80, 85, 140]
     text = ["You Can Use:", "You Can Equip:", "You Can Cast:"]
 
     if display_type == 0:  # For Potions
