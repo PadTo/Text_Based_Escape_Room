@@ -2,11 +2,13 @@
 import random
 from items import All_items  # Ensure All_items is imported correctly
 from text_effect import type_effect
-from inventory import add_item_to_inventory
+from inventory import add_item_to_inventory, current_space, max_space
 
 
 def drop_loot(monster, double_loot_chance=False):
     item_tracker = []
+    total_items = 0
+    initiate_break = False
     if not double_loot_chance:
         multiplier = 1
     else:
@@ -44,7 +46,7 @@ def drop_loot(monster, double_loot_chance=False):
                 item_tracker.append(item_drop)
 
     # Specific item drop for Lich King
-    if monster == "Lich King":
+    if monster["Name"] == "Lich King":
         item_store["Frostmourne"] = 1
 
     table_len = 80
@@ -53,9 +55,10 @@ def drop_loot(monster, double_loot_chance=False):
     type_effect("Drop:")
     print("-" * table_len)
     print(table_row)
-    print(item_tracker)
+    # print(item_tracker)
     n = 0
     for item, quantity in item_store.items():
+        total_items += quantity
 
         print("-" * table_len)
         item_description = f"{item:<25} | {quantity:<10} | {All_items[item]['Rarity']:<15} | {All_items[item]['Type']:<10} | Press {n}"
@@ -64,37 +67,49 @@ def drop_loot(monster, double_loot_chance=False):
         pass
     print()
 
-    action = input(
-        "Choose action: Take All Items (a), Take Single Item (0,1,2,...), Don't Take Loot (e): ").lower()
-
     while True:
+        action = input(
+            "Choose action: Take All Items (a), Take Single Item (0,1,2,...), Don't Take Loot (e): ").lower()
 
-        if action == "a":
-            type_effect("You chose to take all items.")
-            print()
-            for item, quantity in item_store.items():
+        if action == 'a':
+            if current_space + total_items <= max_space:
+                type_effect("You have chosen to take all items:")
+                for item, quantity in item_store.items():
 
-                add_item_to_inventory(item, quantity)
+                    add_item_to_inventory(item, quantity)
+                    initiate_break = True
+            else:
+                type_effect("Not enough space for all items.")
+                print()
+
+            if initiate_break:
+                type_effect("Continuing Journey!")
+                print()
+                break
 
             break
 
         elif action.isdigit():
-            # Take a single item
             index = int(action)
-            if 0 <= index < len(item_tracker):
+            if 0 <= index < len(item_tracker) and item_tracker[index] != None:
                 item = item_tracker[index]
                 quantity = item_store[item]
-                add_item_to_inventory(item, quantity)
-                type_effect(f"You have taken {quantity} of {item}.")
+                if current_space + quantity <= max_space:
+                    type_effect(f"You have taken {quantity} of {item}.")
+                    add_item_to_inventory(item, quantity)
+                    item_tracker[index] = None
+                    print()
+                else:
+                    type_effect("Not enough space for this item.")
+                    print()
+            else:
+                type_effect("Invalid item selection.")
+                print()
 
-        elif action == "e":
+        elif action == 'e':
             type_effect("You have chosen not to take any loot.")
             print()
             break
-
         else:
-            type_effect("Invalid action selected.")
-
-
-    # return item_store
-print(drop_loot(monster="none", double_loot_chance=False))
+            type_effect("Invalid action. Please choose again.")
+            print()

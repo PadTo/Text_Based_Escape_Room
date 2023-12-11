@@ -29,7 +29,7 @@ regular_enemies = {
 bosses = {
     "Lich King": {
         "Type": "Boss",
-        "Health": 15000,
+        "Health": 15,
         "Attack": 0,
         "Defence": 25,
         "Dodge": 10,

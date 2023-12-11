@@ -4,7 +4,7 @@ import random
 from inventory import *
 from effects import *
 from abilities import trigger_weapon_shield_ability
-
+from drops import drop_loot
 
 global game_state
 
@@ -86,7 +86,7 @@ def player_action(player, monster, player_turn, game_state):
     else:
         while cond:
             action = input(
-                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Run Away (r): ").lower()
+                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Check Monster Stats (c) Run Away (r): ").lower()
             print()
             if action == 'a':
                 combat_round(player, monster, player_turn)
@@ -114,6 +114,11 @@ def player_action(player, monster, player_turn, game_state):
                 else:
                     pass
 
+            elif action == 'c':
+                type_effect(f"The {monster['Name']}'s Stats:")
+                print(monster)
+                pass
+
             elif action == 'r' and monster["Type"] != "Boss":
                 game_state = "Exploration"
                 return game_state
@@ -130,6 +135,8 @@ def combat(player, monster, game_state="Combat"):
     player_turn = True
     turn_tracker = 0
     type_effect(f"You just entered combat with the {monster['Name']}!!")
+    type_effect(f"Total Health: {monster['Health']}")
+    print()
     from character import character_stats
     stats_before_combat = character_stats_before_combat(character_stats)
 
@@ -167,6 +174,11 @@ def combat(player, monster, game_state="Combat"):
         current_health = health_after_combat()
         character_stats = stats_before_combat
         character_stats["Health"] = current_health
+        if monster_on_going_effects["Double Loot Boost"]["Duration"] > 0:
+            double_loot_chance = True
+            drop_loot(monster, double_loot_chance)
+        else:
+            drop_loot(monster)
     else:
         type_effect("You have died...")
 
