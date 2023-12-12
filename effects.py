@@ -7,9 +7,10 @@ stat_decrease_char = []
 # Initial structure of effects dictionaries
 user_on_going_effects = {
     "Extra Attack": {"Amount": False, "Duration": 0, "Item": {}},
-    "Frozen": {"Amount": False, "Duration": 0, "Item": {}},
+    "Frozen":  {"Amount": False, "Duration": 0, "Item": {}},
     "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
-    "Stealth": {"Amount": False, "Duration": 0, "Item": {}}
+    "Stealth": {"Amount": False, "Duration": 0, "Item": {}},
+    "Disarm":  {"Amount": False, "Duration": 0, "Item": {}},
 
 }
 
@@ -19,8 +20,17 @@ monster_on_going_effects = {
     "Stunned": {"Amount": False, "Duration": 0, "Item": {}},
     "Stealth": {"Amount": False, "Duration": 0, "Item": {}},
     "Double Loot Boost": {"Amount": False, "Duration": 0, "Item": {}},
+    "Silence": {"Amount": False, "Duration": 0, "Item": {}},
 
 }
+
+
+def check_if_silenced():
+    if monster_on_going_effects["Silence"]["Duration"] > 0:
+        return True
+    else:
+        return False  # Explicitly return False if not silenced
+
 
 user_cooldowns = {
     "Trap": {"Cooldown": 0, "Item": {}},
@@ -29,9 +39,11 @@ user_cooldowns = {
 }
 
 monster_cooldowns = {
-    "Trap": {"Cooldown": 0, "Item": {}},
-    "Stealth": {"Cooldown": 0, "Item": {}},
-    "Silence": {"Cooldown": 0, "Item": {}},
+    "Trap":    {"Cooldown": 0, "Ability": {}},
+    "Stealth": {"Cooldown": 0, "Ability": {}},
+    "Silence": {"Cooldown": 0, "Ability": {}},
+    "Bleed":   {"Cooldown": 0, "Ability": {}},
+    "Disarm":  {"Cooldown": 0, "Ability": {}},
 
 }
 
@@ -78,7 +90,9 @@ def user_effects_timer():
 
                 if effect != "Double Damage":
                     if details["Item"] != {} and effect not in static_effect:
+
                         stat_decrease(details["Item"])
+                        user_on_going_effects[effect]["Amount"] = 0
 
 
 def monster_effects_timer():
@@ -166,7 +180,7 @@ def cooldowns_effect_timer():
         if details["Cooldown"] > 0:
             details["Cooldown"] -= 1
 
-            if details["Cooldown"] == 0 and details["Item"]:
+            if details["Cooldown"] == 0:
                 type_effect(f"{details['Item']} is now ready to use again.")
                 details["Item"] = {}  # Reset the item key if needed
 
@@ -176,6 +190,5 @@ def monster_cooldowns_effect_timer():
         if details["Cooldown"] > 0:
             details["Cooldown"] -= 1
 
-            if details["Cooldown"] == 0 and details["Item"]:
-                type_effect(f"{details['Item']} is now ready to use again.")
-                details["Item"] = {}  # Reset the item key if needed
+            if details["Cooldown"] == 0:
+                details["Ability"] = {}  # Reset the item key if needed

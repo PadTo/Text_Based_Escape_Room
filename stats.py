@@ -38,6 +38,11 @@ def stat_increase(item=None, multiplier=0, boost_character_multiplier=0):
             type_effect(
                 f"Attack increased by {item_attributes['Attack Damage']}. New total: {character_stats['Attack']}.")
 
+        if "Attack Damage Reduction" in item_attributes:
+            character_stats["Attack"] += item_attributes["Attack Damage Reduction"]
+            type_effect(
+                f"Attack increased by {item_attributes['Attack Damage Reduction']}. New total: {character_stats['Attack']}.")
+
         if "Defence" in item_attributes:
             character_stats["Defence"] += item_attributes["Defence"]
             type_effect(
@@ -73,6 +78,11 @@ def stat_decrease(item=None, multiplier=0, lower_character_multiplier=0):
                 character_stats["Attack"] -= item_attributes["Attack Damage"]
                 type_effect(
                     f"Attack decreased by {item_attributes['Attack Damage']}. New total: {character_stats['Attack']}.")
+
+            if "Attack Damage Reduction" in item_attributes:
+                character_stats["Attack"] -= item_attributes["Attack Damage Reduction"]
+                type_effect(
+                    f"Attack decreased by {item_attributes['Attack Damage Reduction']}. New total: {character_stats['Attack']}.")
 
             if "Defence" in item_attributes:
                 character_stats["Defence"] -= item_attributes["Defence"]

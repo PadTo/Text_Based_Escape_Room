@@ -49,8 +49,8 @@ def drop_loot(monster, double_loot_chance=False):
     if monster["Name"] == "Lich King":
         item_store["Frostmourne"] = 1
 
-    table_len = 80
-    table_row = f"{'Item':<25} | {'Quantity':<10} | {'Rarity':<15} | {'Type':<10} | {'Action':<10}"
+    table_len = 85
+    table_row = f"{'Item':<25} | {'Quantity':<10} | {'Rarity':<15} | {'Type':<15} | {'Action':<10}"
 
     type_effect("Drop:")
     print("-" * table_len)
@@ -61,7 +61,7 @@ def drop_loot(monster, double_loot_chance=False):
         total_items += quantity
 
         print("-" * table_len)
-        item_description = f"{item:<25} | {quantity:<10} | {All_items[item]['Rarity']:<15} | {All_items[item]['Type']:<10} | Press {n}"
+        item_description = f"{item:<25} | {quantity:<10} | {All_items[item]['Rarity']:<15} | {All_items[item]['Type']:<15} | Press: {n}"
         print(item_description)
         n += 1
         pass
@@ -78,6 +78,7 @@ def drop_loot(monster, double_loot_chance=False):
 
                     add_item_to_inventory(item, quantity)
                     initiate_break = True
+                    total_items -= 1
             else:
                 type_effect("Not enough space for all items.")
                 print()

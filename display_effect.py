@@ -25,19 +25,3 @@ def display_effects(item, number, quantity=0, display_type=0):
 
     print(item_description)
     print("-" * table_len[display_type])
-
-
-def display_drop(item, number, quantity):
-    table_len = 80
-    table_row = f"{'Item':<25} | {'Weapon Type':<15} | {'Use':<10}"
-    item_description = f"{item:<25} | {item.get('Weapon Type', 'N/A'):<15} | Press: {number:<3}"
-
-    if number == 0:
-        type_effect("Dropped Items")
-        print(table_row)
-        print("-" * table_len)
-
-    print(item_description)
-    print("-" * table_len)
-
-    pass

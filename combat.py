@@ -5,6 +5,8 @@ from inventory import *
 from effects import *
 from abilities import trigger_weapon_shield_ability
 from drops import drop_loot
+from monster_abilities import *
+
 
 global game_state
 
@@ -42,7 +44,11 @@ def combat_round(attacker, defender, player_turn):
                 print()
 
             else:
-                if equiped_gear["Shield"] is not None:
+                abilities = available_monster_ability(attacker)
+                print(abilities)
+                choose_random = random.choice(abilities)
+
+                if equiped_gear["Shield"] is not None and choose_random == "Basic Attack":
 
                     if "Special Trigger" in All_items[equiped_gear["Shield"]]:
                         damage = calculate_damage(
@@ -61,21 +67,42 @@ def combat_round(attacker, defender, player_turn):
                                 f"{deffender_name} Health: {defender['Health']}")
                             print()
                         else:
-                            do_nothing = []
+                            damage = calculate_damage(
+                                attacker["Attack"], defender["Defence"])
+                            defender["Health"] -= damage
+                            attacker_name = attacker["Name"]
+                            deffender_name = defender["Name"]
+                            type_effect(
+                                f"{attacker_name} attacks for {damage} damage!")
+                            type_effect(
+                                f"{deffender_name} Health: {defender['Health']}")
+                            print()
 
                     else:
                         pass
                 else:
                     damage = calculate_damage(
                         attacker["Attack"], defender["Defence"])
-                    defender["Health"] -= damage
                     attacker_name = attacker["Name"]
                     deffender_name = defender["Name"]
-                    type_effect(
-                        f"{attacker_name} attacks for {damage} damage!")
-                    type_effect(
-                        f"{deffender_name} Health: {defender['Health']}")
-                    print()
+                    if choose_random == "Basic Attack":
+
+                        type_effect(
+                            f"{attacker_name} attacks for {damage} damage!")
+                        defender["Health"] -= damage
+                        type_effect(
+                            f"{deffender_name} Health: {defender['Health']}")
+                        print()
+                    elif not check_if_silenced():
+                        cast = enemy_abilities[attacker["Name"]][choose_random](
+                            target="Player", monster=attacker)
+                    else:
+                        type_effect(
+                            f"{attacker_name} attacks for {damage} damage!")
+                        defender["Health"] -= damage
+                        type_effect(
+                            f"{deffender_name} Health: {defender['Health']}")
+                        print()
 
 
 def player_action(player, monster, player_turn, game_state):
@@ -86,11 +113,16 @@ def player_action(player, monster, player_turn, game_state):
     else:
         while cond:
             action = input(
-                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Check Monster Stats (c) Run Away (r): ").lower()
+                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Check Monster Stats (c), Check Your Stats (y), Run Away (r): ").lower()
             print()
             if action == 'a':
-                combat_round(player, monster, player_turn)
-                cond = False
+                if not user_on_going_effects["Disarm"]["Duration"] > 0:
+                    combat_round(player, monster, player_turn)
+                    cond = False
+                else:
+                    type_effect(
+                        "You can't attack, please use another action.")
+                    pass
             elif action == 'u':
 
                 if check_if_equiped_item_abilities_true():
@@ -117,6 +149,13 @@ def player_action(player, monster, player_turn, game_state):
             elif action == 'c':
                 type_effect(f"The {monster['Name']}'s Stats:")
                 print(monster)
+                print()
+                pass
+
+            elif action == 'y':
+                type_effect(f"The {character_stats['Name']}'s Stats:")
+                print(character_stats)
+                print()
                 pass
 
             elif action == 'r' and monster["Type"] != "Boss":
@@ -142,6 +181,12 @@ def combat(player, monster, game_state="Combat"):
 
     while player["Health"] > 0 and monster["Health"] > 0:
         # Player's turn
+
+        # Check for game state change (e.g., running away)
+        if game_state == "Exploration":
+            type_effect("You have run away, coward...")
+            break
+
         if player_turn:
             if not cant_move(0):
                 player_action(player, monster, player_turn, game_state)
@@ -150,11 +195,6 @@ def combat(player, monster, game_state="Combat"):
         else:
             if not cant_move(1):
                 combat_round(monster, player, player_turn)
-
-        # Check for game state change (e.g., running away)
-        if game_state != "Combat":
-            type_effect("You have run away, coward...")
-            break
 
         # Process end-of-turn events
         if player_turn:

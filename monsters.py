@@ -6,7 +6,8 @@ regular_enemies = {
         "Type": "Regular",
         "Health": 60,
         "Attack": 15,
-        "Defence": 10,
+        "Defence": 5,
+        "Dodge": 30,
         "Name": "Shadow Thief"
     },
     "Goblin Engineer": {
@@ -14,6 +15,7 @@ regular_enemies = {
         "Health": 50,
         "Attack": 20,
         "Defence": 15,
+        "Dodge": 5,
         "Name": "Goblin Engineer"
     },
     "Mystic Sorcerer": {
@@ -21,6 +23,7 @@ regular_enemies = {
         "Health": 70,
         "Attack": 18,
         "Defence": 12,
+        "Dodge": 5,
         "Name": "Mystic Sorcerer"
     }
 }

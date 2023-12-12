@@ -335,7 +335,7 @@ def greed_effect_potion_ability(potion, user, target, game_state="Combat"):
             user_on_going_effects[effect_name] = {
                 "Amount": defence_penalty, "Duration": duration, "Item": potion}
 
-        stat_decrease(potion)
+        stat_increase(potion)
 
 
 def random_effect_potion_ability(potion, user, target, game_state="Combat"):

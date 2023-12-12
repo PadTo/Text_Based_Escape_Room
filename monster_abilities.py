@@ -1,97 +1,164 @@
-def attack():
-    return True
 
-# Special ability functions (placeholders)
+from text_effect import type_effect
+from character import character_stats
+from effects import user_on_going_effects, monster_cooldowns
+from stats import stat_increase
+
+
+def duration_mod(duration):
+    duration += 1
+    return duration
+
+
+def attack():
+    return "Attack"
+
+
 # Shadow Thief Abilities
 
 
-def shadow_thief_shadow_step(target):
-    # Teleports behind the target and strikes
-    pass
+def shadow_thief_shadow_step(target, monster):
+    back_stab_dmg = 20
+    attack_reduction = -10
+    cooldown_duration = duration_mod(4)
+
+    # Initialize cooldown if it doesn't exist
+    if "Back Stab" not in monster_cooldowns:
+        monster_cooldowns["Back Stab"] = {"Cooldown": 0}
+
+    if monster_cooldowns["Back Stab"]["Cooldown"] <= 0:
+        type_effect(
+            f"The {monster['Name']} has teleported behind you!. {monster['Name']} uses back-stab.")
+        character_stats["Health"] -= back_stab_dmg
+
+        type_effect(
+            f"{back_stab_dmg} damage taken. Current Health: {character_stats['Health']}.")
+
+        # Apply attack reduction
+        user_on_going_effects["Attack Reduction"] = {
+            "Amount": attack_reduction, "Duration": 4, "Item": "Shadow Thief's Daggers"}
+        print(user_on_going_effects)
+        stat_increase("Shadow Thief's Daggers")
+
+        type_effect(f"Reduced attack for 4 rounds.")
+        print()
+
+        # Set cooldown for the ability
+        monster_cooldowns["Back Stab"]["Cooldown"] = cooldown_duration
+        return True
+    else:
+        return False
 
 
-def shadow_thief_disarm(player):
-    # Temporarily disarms the player
-    pass
+def shadow_thief_disarm(target, monster):
+
+    cooldown_duration = duration_mod(5)
+    disarm_duration = 2
+
+    # Initialize cooldown if it doesn't exist
+    if "Disarm" not in monster_cooldowns:
+        monster_cooldowns["Disarm"] = {"Cooldown": 0}
+
+    if monster_cooldowns["Disarm"]["Cooldown"] <= 0:
+        type_effect(
+            f"You have been temporarily disarmed for {disarm_duration} rounds...")
+
+        # Apply disarm
+        user_on_going_effects["Disarm"] = {
+            "Amount": True, "Duration": duration_mod(disarm_duration), "Item": {}}
+
+        # Set cooldown for the ability
+        monster_cooldowns["Disarm"]["Cooldown"] = cooldown_duration
+        return True
+    else:
+        return False
 
 # Goblin Engineer Abilities
 
 
-def goblin_engineer_mechanical_fix():
+def goblin_engineer_mechanical_fix(target, self):
     # Repairs or buffs mechanical units
     pass
 
 
-def goblin_engineer_turret_deploy():
+def goblin_engineer_turret_deploy(target, self):
     # Deploys a stationary turret
     pass
 
 # Mystic Sorcerer Abilities
 
 
-def mystic_sorcerer_arcane_blast(target):
+def mystic_sorcerer_arcane_blast(target, self):
     # Strong magical attack against the target
     pass
 
 
-def mystic_sorcerer_spell_barrier():
+def mystic_sorcerer_spell_barrier(target, self):
     # Shields from attacks
     pass
 
 # Lich King Abilities
 
 
-def lich_king_necrotic_pulse(target):
+def lich_king_necrotic_pulse(target, self):
     # Area-of-effect damage
     pass
 
 
-def lich_king_soul_drain(target):
+def lich_king_soul_drain(target, self):
     # Drains health from the player
     pass
 
 # Fire-Breathing Dragon Abilities
 
 
-def dragon_inferno_breath(target):
+def dragon_inferno_breath(target, self):
     # Powerful fire attack
     pass
 
 
-def dragon_wing_gust(target):
+def dragon_wing_gust(target, self):
     # Knocks back and damages the player
     pass
 
 
-regular_enemy_abilities = {
+enemy_abilities = {
+
+    # Regular enemies
     "Shadow Thief": {
-        "basic_attack": attack,
-        "shadow_step": shadow_thief_shadow_step,  # Teleports and strikes
-        "disarm": shadow_thief_disarm  # Temporarily disarms the player
+        "Basic Attack": attack,
+        "Shadow Step": shadow_thief_shadow_step,  # Teleports and strikes
+        "Disarm": shadow_thief_disarm  # Temporarily disarms the player
     },
     "Goblin Engineer": {
-        "basic_attack": attack,
-        "mechanical_fix": goblin_engineer_mechanical_fix,
-        "turret_deploy": goblin_engineer_turret_deploy
+        "Basic Attack": attack,
+        "Mechanical Fix": goblin_engineer_mechanical_fix,
+        "Turret Deploy": goblin_engineer_turret_deploy
     },
     "Mystic Sorcerer": {
-        "basic_attack": attack,
-        "arcane_blast": mystic_sorcerer_arcane_blast,  # Strong magical attack
-        "spell_barrier": mystic_sorcerer_spell_barrier  # Shields from attacks
+        "Basic Attack": attack,
+        "Arcane Blast": mystic_sorcerer_arcane_blast,  # Strong magical attack
+        "Spell Barrier": mystic_sorcerer_spell_barrier  # Shields from attacks
     },
 
-}
 
-boss_abilities = {
+    # Bosses
     "Lich King": {
-        "basic_attack": attack,
-        "necrotic_pulse": lich_king_necrotic_pulse,  # Area-of-effect damage
-        "soul_drain": lich_king_soul_drain  # Drains health from the player
+        "Basic Attack": attack,
+        "Necrotic Pulse": lich_king_necrotic_pulse,  # Area-of-effect damage
+        "Soul Drain": lich_king_soul_drain  # Drains health from the player
     },
     "Fire-Breathing Dragon": {
-        "basic_attack": attack,
-        "inferno_breath": dragon_inferno_breath,  # Powerful fire attack
-        "wing_gust": dragon_wing_gust  # Knocks back and damages the player
+        "Basic Attack": attack,
+        "Inferno Breath": dragon_inferno_breath,  # Powerful fire attack
+        "Wing Gust": dragon_wing_gust  # Knocks back and damages the player
     },
 
 }
+
+
+def available_monster_ability(attacker):
+    abilities = enemy_abilities[attacker["Name"]]
+    available_abilities = [ability for ability in abilities if monster_cooldowns.get(
+        ability, {"Cooldown": 0})["Cooldown"] <= 0]
+    return available_abilities

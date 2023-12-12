@@ -256,8 +256,8 @@ All_items = {
 
     "Potion of Greed": {
         "Type": "Potion",
-        "Effect": "Doubles any loot found",
-        "Defence": -10,
+        "Effect": "Doubles the chance of finding rare loot",
+        "Defence": -10,  # decrease
         "Duration": 4,
         "Rarity": "Epic"
     },
@@ -301,4 +301,15 @@ All_items = {
         "Rarity": "Uncommon"
     },
 
+
+
+
+
+    # Enemy items:
+
+    "Shadow Thief's Daggers": {
+        "Type": "Weapon",
+        "Weapon Type": "Dagger",
+        "Attack Damage Reduction": -10
+    }
 }
