@@ -6,11 +6,11 @@
 import random
 
 # Import necessary modules and functions
-from text_effect import type_effect
-from combat import combat
-from items import All_items
-from inventory import add_item_to_inventory, display_inventory
-from character import character_stats
+from Game_Structure.text_effect import type_effect
+from Game_Structure.combat import combat
+from Game_Structure.items import All_items
+from Game_Structure.inventory import add_item_to_inventory, display_inventory
+from Game_Structure.character import character_stats
 from Maps.ancient_library import *
 
 
