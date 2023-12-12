@@ -2,7 +2,7 @@
 from text_effect import type_effect
 from character import character_stats
 from effects import user_on_going_effects, monster_cooldowns
-from stats import stat_increase
+from stats import stat_increase, stat_decrease
 
 
 def duration_mod(duration):
@@ -36,9 +36,9 @@ def shadow_thief_shadow_step(target, monster):
 
         # Apply attack reduction
         user_on_going_effects["Attack Reduction"] = {
-            "Amount": attack_reduction, "Duration": 4, "Item": "Shadow Thief's Daggers"}
-        print(user_on_going_effects)
-        stat_increase("Shadow Thief's Daggers")
+            "Amount": -attack_reduction, "Duration": 4, "Item": "Shadow Thief's Daggers"}
+
+        stat_decrease("Shadow Thief's Daggers")
 
         type_effect(f"Reduced attack for 4 rounds.")
         print()

@@ -91,8 +91,11 @@ def user_effects_timer():
                 if effect != "Double Damage":
                     if details["Item"] != {} and effect not in static_effect:
 
-                        stat_decrease(details["Item"])
-                        user_on_going_effects[effect]["Amount"] = 0
+                        if All_items[effect]["Amount"] > 0:
+                            stat_decrease(details["Item"])
+
+                        elif All_items[effect]["Amount"] < 0:
+                            stat_increase(details["Item"])
 
 
 def monster_effects_timer():

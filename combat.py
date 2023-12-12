@@ -45,7 +45,6 @@ def combat_round(attacker, defender, player_turn):
 
             else:
                 abilities = available_monster_ability(attacker)
-                print(abilities)
                 choose_random = random.choice(abilities)
 
                 if equiped_gear["Shield"] is not None and choose_random == "Basic Attack":
@@ -214,6 +213,7 @@ def combat(player, monster, game_state="Combat"):
         current_health = health_after_combat()
         character_stats = stats_before_combat
         character_stats["Health"] = current_health
+        reset_enemies()
         if monster_on_going_effects["Double Loot Boost"]["Duration"] > 0:
             double_loot_chance = True
             drop_loot(monster, double_loot_chance)

@@ -1,5 +1,5 @@
 from character import character_stats
-from items import All_items
+from items import *
 from text_effect import type_effect
 
 
@@ -31,8 +31,17 @@ def stat_increase(item=None, multiplier=0, boost_character_multiplier=0):
             f"Damage multiplier activated ({multiplier}x damage increase). New total: {character_stats['Attack']}.")
 
     else:
-        item_attributes = All_items[item]
 
+        # Check if the item exists in either All_items or enemy_items
+        item_exists = item in All_items or item in enemy_items
+        if item_exists:
+            if item in All_items:
+                item_attributes = All_items[item]
+            # Otherwise, get attributes from enemy_items
+            else:
+                item_attributes = enemy_items[item]
+
+        # You can then use item_attributes for further processing
         if "Attack Damage" in item_attributes:
             character_stats["Attack"] += item_attributes["Attack Damage"]
             type_effect(
@@ -72,7 +81,15 @@ def stat_decrease(item=None, multiplier=0, lower_character_multiplier=0):
         if item is None:
             return
         else:
-            item_attributes = All_items[item]
+
+            # Check if the item exists in either All_items or enemy_items
+            item_exists = item in All_items or item in enemy_items
+            if item_exists:
+                if item in All_items:
+                    item_attributes = All_items[item]
+                # Otherwise, get attributes from enemy_items
+                else:
+                    item_attributes = enemy_items[item]
 
             if "Attack Damage" in item_attributes:
                 character_stats["Attack"] -= item_attributes["Attack Damage"]

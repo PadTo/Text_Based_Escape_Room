@@ -301,15 +301,22 @@ All_items = {
         "Rarity": "Uncommon"
     },
 
+    "Scroll of Power": {
+        "Type": "Misc",
+        "Ability Name": "Increases Attack Damage",
+        "Attack": 10,
+        "Rarity": "Rare"
+    },
+
+}
 
 
-
-
-    # Enemy items:
-
+enemy_items = {
     "Shadow Thief's Daggers": {
         "Type": "Weapon",
         "Weapon Type": "Dagger",
-        "Attack Damage Reduction": -10
+        "Attack Damage Reduction": 10,
+        "Rarity": "Legendary",
+        "Attack": 10,
     }
 }

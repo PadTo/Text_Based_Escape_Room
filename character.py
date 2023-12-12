@@ -10,11 +10,11 @@ equiped_gear = {
 }
 
 character_stats = {
-    "Health": 1000,
-    "Attack": 10,
+    "Health": 100,
+    "Attack": 15,
     "Defence": 2,
     "Dodge": 2,
-    "Name": "Kiausinis"
+    "Name": "Martyn"
 }
 
 
