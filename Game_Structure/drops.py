@@ -1,8 +1,9 @@
 
 import random
-from items import All_items  # Ensure All_items is imported correctly
-from text_effect import type_effect
-from inventory import add_item_to_inventory, current_space, max_space
+# Ensure All_items is imported correctly
+from Game_Structure.items import All_items
+from Game_Structure.text_effect import type_effect
+from Game_Structure.inventory import add_item_to_inventory, current_space, max_space
 
 
 def drop_loot(monster, double_loot_chance=False):

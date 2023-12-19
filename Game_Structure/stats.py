@@ -1,6 +1,6 @@
-from character import character_stats
-from items import *
-from text_effect import type_effect
+from Game_Structure.character import character_stats
+from Game_Structure.items import *
+from Game_Structure.text_effect import type_effect
 
 
 def stat_increase_ability(stat, amount):

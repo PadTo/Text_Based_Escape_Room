@@ -1,9 +1,9 @@
-from items import *
-from text_effect import type_effect
-from display_effect import *
-from character import *
-from abilities import *
-from stats import stat_increase, stat_decrease
+from Game_Structure.items import *
+from Game_Structure.text_effect import type_effect
+from Game_Structure.display_effect import *
+from Game_Structure.character import *
+from Game_Structure.abilities import *
+from Game_Structure.stats import stat_increase, stat_decrease
 
 inventory = {}      # Empty inventory
 max_space = 16      # Maximum Space
@@ -258,7 +258,7 @@ def display_inventory():
 def use_potion_in_combat(potion_name, game_state="Combat", user="Self", target="Enemy"):
     global current_space
 
-    from abilities import item_abilities
+    from Game_Structure.abilities import item_abilities
 
     if All_items[potion_name]["Type"] == "Health Potion":
         type_effect(f"You used {potion_name}.")
@@ -376,7 +376,7 @@ def check_if_equiped_item_abilities_true():
         return False
 
     while True:
-        from abilities import item_abilities
+        from Game_Structure.abilities import item_abilities
         try:
             spell_index = int(input(
                 "Select a spell to use (enter the number): "))

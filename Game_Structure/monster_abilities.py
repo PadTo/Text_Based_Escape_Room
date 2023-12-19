@@ -1,8 +1,8 @@
 
-from text_effect import type_effect
-from character import character_stats
-from effects import user_on_going_effects, monster_cooldowns
-from stats import stat_increase, stat_decrease
+from Game_Structure.text_effect import type_effect
+from Game_Structure.character import character_stats
+from Game_Structure.effects import user_on_going_effects, monster_cooldowns
+from Game_Structure.stats import stat_increase, stat_decrease
 
 
 def duration_mod(duration):
@@ -19,7 +19,7 @@ def attack():
 
 def shadow_thief_shadow_step(target, monster):
     back_stab_dmg = 20
-    attack_reduction = -10
+    attack_reduction = 10
     cooldown_duration = duration_mod(4)
 
     # Initialize cooldown if it doesn't exist

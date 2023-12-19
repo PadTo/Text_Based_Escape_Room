@@ -1,4 +1,4 @@
-from text_effect import type_effect
+from Game_Structure.text_effect import type_effect
 
 equiped_gear = {
     "Helm": None,
@@ -10,8 +10,8 @@ equiped_gear = {
 }
 
 character_stats = {
-    "Health": 100,
-    "Attack": 15,
+    "Health": 200,
+    "Attack": 50,
     "Defence": 2,
     "Dodge": 2,
     "Name": "Martyn"

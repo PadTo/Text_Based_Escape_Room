@@ -1,5 +1,5 @@
-from items import All_items
-from text_effect import type_effect
+from Game_Structure.items import All_items
+from Game_Structure.text_effect import type_effect
 
 
 def display_effects(item, number, quantity=0, display_type=0):

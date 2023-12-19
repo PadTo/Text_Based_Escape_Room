@@ -1,5 +1,5 @@
-from inventory import *
-from stats import *
+from Game_Structure.inventory import *
+from Game_Structure.stats import *
 
 stat_increase_char = []
 stat_decrease_char = []
@@ -91,10 +91,10 @@ def user_effects_timer():
                 if effect != "Double Damage":
                     if details["Item"] != {} and effect not in static_effect:
 
-                        if All_items[effect]["Amount"] > 0:
+                        if user_on_going_effects[effect]["Amount"] > 0:
                             stat_decrease(details["Item"])
 
-                        elif All_items[effect]["Amount"] < 0:
+                        elif user_on_going_effects[effect]["Amount"] < 0:
                             stat_increase(details["Item"])
 
 

@@ -1,5 +1,11 @@
 All_items = {
 
+
+    "Mysterious Key": {
+        "Type": "Key",
+        "Rarity": None
+    },
+
     "Frostmourne": {
         "Type": "Weapon",
         "Weapon Type": "Sword",
@@ -308,6 +314,13 @@ All_items = {
         "Rarity": "Rare"
     },
 
+    "Shadow Thief's Daggers": {
+        "Type": "Weapon",
+        "Weapon Type": "Dagger",
+        "Attack Damage Reduction": 10,
+        "Rarity": "Legendary",
+        "Attack": 10,
+    },
 }
 
 

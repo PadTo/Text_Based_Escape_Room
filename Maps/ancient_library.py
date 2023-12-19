@@ -1,8 +1,8 @@
-from text_effect import type_effect
-from items import All_items
-from inventory import add_item_to_inventory
-from combat import combat
-from monsters import *
+from Game_Structure.text_effect import type_effect
+from Game_Structure.items import All_items
+from Game_Structure.inventory import add_item_to_inventory
+from Game_Structure.combat import combat
+from Game_Structure.monsters import *
 
 
 def visit_ancient_library(player):
@@ -230,7 +230,7 @@ def open_treasure_chest(player):
     if "Thunder Hammer" in All_items:
         type_effect(
             "Inside the chest, you find the Thunder Hammer, a weapon of immense power.")
-        add_item_to_inventory(player, "Thunder Hammer", 1)
+        add_item_to_inventory("Thunder Hammer", 1)
         type_effect("With the Thunder Hammer in hand, you feel unstoppable.")
     else:
         type_effect(

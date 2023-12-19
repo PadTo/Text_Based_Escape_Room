@@ -1,11 +1,11 @@
-from text_effect import *
-from monsters import *
+from Game_Structure.text_effect import *
+from Game_Structure.monsters import *
 import random
-from inventory import *
-from effects import *
-from abilities import trigger_weapon_shield_ability
-from drops import drop_loot
-from monster_abilities import *
+from Game_Structure.inventory import *
+from Game_Structure.effects import *
+from Game_Structure.abilities import trigger_weapon_shield_ability
+from Game_Structure.drops import drop_loot
+from Game_Structure.monster_abilities import *
 
 
 global game_state
@@ -112,7 +112,7 @@ def player_action(player, monster, player_turn, game_state):
     else:
         while cond:
             action = input(
-                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Check Monster Stats (c), Check Your Stats (y), Run Away (r): ").lower()
+                "Choose action: Attack (a), Use Ability (u), Switch Weapons (s), Drink Potion (p), Check Monster Stats (c), Check Your Stats (y), Run Away (r), Do Nothing (n): ").lower()
             print()
             if action == 'a':
                 if not user_on_going_effects["Disarm"]["Duration"] > 0:
@@ -157,14 +157,17 @@ def player_action(player, monster, player_turn, game_state):
                 print()
                 pass
 
-            elif action == 'r' and monster["Type"] != "Boss":
+            elif action == 'r' and monster["Type"] == "Regular":
                 game_state = "Exploration"
+                cond = False
                 return game_state
 
             elif action == 'r' and monster["Type"] == "Boss":
                 type_effect(f"You can't run away from the {monster['Name']}")
                 pass
-
+            elif action == 'n':
+                type_effect("You did nothing!")
+                cond = False
             else:
                 type_effect("Invalid action.")
 
@@ -175,7 +178,7 @@ def combat(player, monster, game_state="Combat"):
     type_effect(f"You just entered combat with the {monster['Name']}!!")
     type_effect(f"Total Health: {monster['Health']}")
     print()
-    from character import character_stats
+    from Game_Structure.character import character_stats
     stats_before_combat = character_stats_before_combat(character_stats)
 
     while player["Health"] > 0 and monster["Health"] > 0:

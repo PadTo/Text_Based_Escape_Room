@@ -23,7 +23,7 @@ def main():
     type_effect(
         "You stand at a crossroads in a dense forest, a map in your hand, and a sense of adventure in your heart.")
 
-    while game_state != "End":
+    while game_state != "End" or game_state != "Dead":
         type_effect("\nWhat would you like to do?")
         type_effect("1: Visit the Ancient Library")
         type_effect("2: Check your inventory")

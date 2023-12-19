@@ -1,9 +1,9 @@
 import random
-from effects import *
-from items import *
-from inventory import *
-from stats import *
-from character import equiped_gear, character_stats
+from Game_Structure.effects import *
+from Game_Structure.items import *
+from Game_Structure.inventory import *
+from Game_Structure.stats import *
+from Game_Structure.character import equiped_gear, character_stats
 import math
 
 # This is because the combat currently only accounts for e.g. 3 rounds when an effect has to continue for 4 rounds
@@ -294,6 +294,12 @@ def increase_dodge_chance_potion_ability(potion, user, target, game_state="Comba
         effect_name = "Dodge Boost (Potion)"
         duration = used_potion["Duration"]
         boost_value = used_potion["Dodge"]
+
+        # Need to add logic to add the effect before it is checked
+
+        if effect_name not in user_on_going_effects:
+            monster_cooldowns["Back Stab"] = {
+                "Amount": boost_value, "Duration": duration, "Item": potion}
 
         if effect_name in user_on_going_effects:
             user_on_going_effects[effect_name]["Duration"] += duration
