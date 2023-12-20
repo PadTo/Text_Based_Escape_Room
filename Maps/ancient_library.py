@@ -237,6 +237,8 @@ def open_treasure_chest(player):
             "The chest is unfortunately empty. It seems someone else has claimed the treasure.")
     return_to_library(player)
 
+# Currently isn't sed
+
 
 def open_ancient_chest(player):
 
